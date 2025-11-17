@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>styles/02HanwhaR.ttf</file>
+        <file>styles/Pretendard-Medium.ttf</file>
+    </qresource>
+</RCC>
