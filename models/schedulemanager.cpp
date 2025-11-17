@@ -14,6 +14,15 @@ ScheduleManager::~ScheduleManager()
 
 bool ScheduleManager::openDatabase()
 {
+    QString dbDir = QFileInfo(m_dbPath).absolutePath();
+
+    if(!QDir(dbDir).exists()) {
+        // 테스트 코드, 삭제 필요
+        // 헤더에서 qDebug 제거
+        qDebug() << "DB 폴더를 생성합니다:" << dbDir;
+        QDir().mkpath(dbDir);
+    }
+
     if (!m_database.open()) {
         emit databaseError("Failed to open database: " + m_database.lastError().text());
         return false;

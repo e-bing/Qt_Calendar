@@ -9,6 +9,10 @@
 #include <QSqlError>
 #include <QVariant>
 #include <QDebug>
+#include <QFile>
+#include <QDir>
+#include <QFileInfo>
+#include <QDebug>
 #include "schedule.h"
 
 class ScheduleManager : public QObject

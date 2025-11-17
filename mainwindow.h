@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 
+#include "./widgets/calendarview.h"
+#include "./models/schedulemanager.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -19,5 +22,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    ScheduleManager* scheduleManager;
+    CalendarView* calendar;
 };
 #endif // MAINWINDOW_H
