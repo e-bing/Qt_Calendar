@@ -19,7 +19,6 @@ bool ScheduleManager::openDatabase()
         return false;
     }
 
-    // 테이블이 없으면 생성
     QSqlQuery query(m_database);
     QString createTableSql = R"(
         CREATE TABLE IF NOT EXISTS schedules (
