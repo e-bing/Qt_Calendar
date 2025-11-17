@@ -15,7 +15,7 @@ public:
     QString color();
 
     // setter functions
-    // void setId(int num);
+    void setId(int num);
     void setTitle(const QString& title);
     void setColor(const QString& color);
 
