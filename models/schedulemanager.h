@@ -5,6 +5,10 @@
 #include <QList>
 #include <QVariantMap>
 #include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QVariant>
+#include <QDebug>
 #include "schedule.h"
 
 class ScheduleManager : public QObject
