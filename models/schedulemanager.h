@@ -1,8 +1,15 @@
 #ifndef SCHEDULEMANAGER_H
 #define SCHEDULEMANAGER_H
 
-class ScheduleManager
+#include <QObject>
+#include <QList>
+#include <QVariantMap>
+#include <QSqlDatabase>
+#include "schedule.h"
+
+class ScheduleManager : public QObject
 {
+    Q_OBJECT
 public:
     ScheduleManager();
 };
