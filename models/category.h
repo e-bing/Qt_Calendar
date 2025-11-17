@@ -1,15 +1,28 @@
 #ifndef CATEGORY_H
 #define CATEGORY_H
 
-#include <QObject>
+#include <QString>
 
-class Category : public QObject
+class Category
 {
-    Q_OBJECT
 public:
-    explicit Category(QObject *parent = nullptr);
+    Category();
+    // Category(int id, const QString& title, const Qstring& color); // 복사 생성자
 
-signals:
+    // getter functions
+    int id();
+    QString title();
+    QString color();
+
+    // setter functions
+    // void setId(int num);
+    void setTitle(const QString& title);
+    void setColor(const QString& color);
+
+private:
+    int m_id;
+    QString m_title;
+    QString m_color;
 };
 
 #endif // CATEGORY_H
