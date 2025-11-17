@@ -1,4 +1,40 @@
 #include "category.h"
 
-Category::Category()
+Category::Category() : m_id(-1)
 {}
+
+Category::Category(int id, const QString& title, const QString& color) : m_id(id), m_title(title), m_color(color)
+{
+}
+
+// getter functions
+int Category::id()
+{
+    return m_id;
+}
+
+QString Category::title()
+{
+    return m_title;
+}
+
+QString Category::color()
+{
+    return m_color;
+}
+
+// setter functions
+void Category::setId(int num)
+{
+    m_id = num;
+}
+
+void Category::setTitle(const QString& title)
+{
+    m_title = title;
+}
+
+void Category::setColor(const QString& color)
+{
+    m_color = color;
+}

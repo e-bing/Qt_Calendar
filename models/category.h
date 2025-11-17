@@ -7,7 +7,7 @@ class Category
 {
 public:
     Category();
-    // Category(int id, const QString& title, const Qstring& color); // 복사 생성자
+    Category(int id, const QString& title, const QString& color);
 
     // getter functions
     int id();
