@@ -3,6 +3,10 @@
 
 #include <QVBoxLayout>
 
+// test code
+#include <QString>
+#include <QDateTime>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -20,11 +24,19 @@ MainWindow::MainWindow(QWidget *parent)
     QString dbPath = QCoreApplication::applicationDirPath() + "/database/schedule.db";
     ScheduleManager* scheduleManager = new ScheduleManager(dbPath, this);
 
+    // test code
+    // Schedule* a = new Schedule(1, QString("일정이름"), QDateTime::currentDateTime(), QDateTime::currentDateTime(),
+    //                            QString("서울"), QString("놀러감"));
+
+
     if (!scheduleManager->openDatabase()) {
         qWarning() << "DB 열기 실패";
         // 에러 처리 추가
         return;
     }
+
+    // test code
+    // scheduleManager->addSchedule(*a);
 
     // 스케줄 매니저에서 목록 할당
     QList<Schedule> schedules = scheduleManager->getAllSchedules();

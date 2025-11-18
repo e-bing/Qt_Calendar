@@ -34,10 +34,8 @@ protected:
     void paintCell(QPainter *painter, const QRect &rect, QDate date) const override;
 
 private:
-    // QCalendarWidget* m_calendar;
     QList<Schedule> m_schedules;
 
-    // void highlightScheduleDates();
     void showSchedulesForDate(const QDate& date);
     QList<Schedule> findSchedulesForDate(const QDate& date) const;
 };
