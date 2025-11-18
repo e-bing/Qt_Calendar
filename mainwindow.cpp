@@ -3,6 +3,10 @@
 
 #include <QVBoxLayout>
 
+// test code
+#include <QString>
+#include <QDateTime>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -20,23 +24,38 @@ MainWindow::MainWindow(QWidget *parent)
     QString dbPath = QCoreApplication::applicationDirPath() + "/database/schedule.db";
     ScheduleManager* scheduleManager = new ScheduleManager(dbPath, this);
 
+    // test code
+    // Schedule* a = new Schedule(1, QString("일정이름"), QDateTime::currentDateTime(), QDateTime::currentDateTime(),
+    //                            QString("서울"), QString("놀러감"));
+
+
     if (!scheduleManager->openDatabase()) {
         qWarning() << "DB 열기 실패";
         // 에러 처리 추가
         return;
     }
 
+    // test code
+    // scheduleManager->addSchedule(*a);
+
     // 스케줄 매니저에서 목록 할당
     QList<Schedule> schedules = scheduleManager->getAllSchedules();
     calendar->setSchedules(schedules);
 
     // // 날짜 선택 시 처리
-    // connect(calendar, &CalendarView::dateSelected,
-    //         this, &MainWindow::handleDateSelected);
+    connect(calendar, &CalendarView::dateSelected,
+            this, &MainWindow::handleDateSelected);
 
     // // 일정 선택 시 처리
     // connect(calendar, &CalendarView::scheduleSelected,
     //         this, &MainWindow::handleScheduleSelected);
+}
+
+void MainWindow::handleDateSelected(const QDate& date)
+{
+    QList<Schedule> schedules = calendar->showSchedulesForDate(date); // 일정 리스트 가져오기
+    ScheduleListView* listView = new ScheduleListView(schedules, this);
+    listView->exec();
 }
 
 MainWindow::~MainWindow()

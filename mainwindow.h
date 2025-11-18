@@ -5,6 +5,7 @@
 
 #include "./widgets/calendarview.h"
 #include "./models/schedulemanager.h"
+#include "./widgets/schedulelistview.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -24,5 +25,7 @@ private:
     Ui::MainWindow *ui;
     ScheduleManager* scheduleManager;
     CalendarView* calendar;
+
+    void handleDateSelected(const QDate& date);
 };
 #endif // MAINWINDOW_H
