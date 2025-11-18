@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QList>
+#include <QLabel>
 #include "../models/schedule.h"
 
 class QListWidget;
@@ -11,9 +12,10 @@ class ScheduleListView : public QDialog
 {
     Q_OBJECT
 public:
-    explicit ScheduleListView(const QList<Schedule>& schedules, QWidget *parent = nullptr);
+    explicit ScheduleListView(const QList<Schedule>& schedules, const QDate& date, QWidget *parent = nullptr);
 
 private:
+    QLabel* m_dateLabel;
     QListWidget* m_listWidget;
     QList<Schedule> m_schedules;
 
