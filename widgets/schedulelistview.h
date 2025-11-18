@@ -8,6 +8,7 @@
 #include <QVBoxLayout>
 #include "../models/schedule.h"
 #include "scheduledetailview.h"
+#include "schedulelistcell.h"
 #include "../resources/styles/colors.h"
 
 class QListWidget;

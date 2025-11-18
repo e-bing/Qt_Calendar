@@ -40,39 +40,19 @@ void ScheduleListView::setupUI()
 
 void ScheduleListView::populateSchedules()
 {
-    qDebug() << m_schedules.length();
+    m_listWidget->clear();
+
     for (const Schedule& schedule : m_schedules) {
-        QWidget* itemWidget = new QWidget(m_listWidget);
-        QHBoxLayout* row1 = new QHBoxLayout;
-        QLabel* colorBox = new QLabel;
-        colorBox->setFixedSize(12, 12); // 카테고리 색
-        colorBox->setStyleSheet("background: " + QString(COLOR_PRIMARY)); // 카테고리별 색상 (getColor 함수 임의구현)
-        QLabel* timeLabel = new QLabel(schedule.startTime().toString("HH:mm"));
-        QLabel* titleLabel = new QLabel(schedule.title());
-
-        row1->addWidget(colorBox);
-        row1->addWidget(timeLabel);
-        row1->addWidget(titleLabel);
-
-        QHBoxLayout* row2 = new QHBoxLayout;
-        QLabel* locationLabel = new QLabel(schedule.location());
-        QLabel* memoLabel = new QLabel(schedule.memo());
-        row2->addWidget(locationLabel);
-        row2->addWidget(memoLabel);
-
-        QVBoxLayout* itemLayout = new QVBoxLayout(itemWidget);
-        itemLayout->addLayout(row1);
-        itemLayout->addLayout(row2);
-        itemWidget->setLayout(itemLayout);
-
         QListWidgetItem* item = new QListWidgetItem(m_listWidget);
-        item->setSizeHint(itemWidget->sizeHint());
+        ScheduleListCell* cell = new ScheduleListCell(schedule, m_listWidget);
+        item->setSizeHint(QSize(280, 56)); // 필요시 조정
         m_listWidget->addItem(item);
-        m_listWidget->setItemWidget(item, itemWidget);
+        m_listWidget->setItemWidget(item, cell);
     }
 
     if (m_schedules.isEmpty()) {
-        m_listWidget->addItem("해당 날짜에 일정이 없습니다.");
+        QListWidgetItem* item = new QListWidgetItem(QStringLiteral("해당 날짜에 일정이 없습니다."), m_listWidget);
+        m_listWidget->addItem(item);
     }
 }
 

@@ -2,12 +2,17 @@
 #define SCHEDULELISTCELL_H
 
 #include <QWidget>
+#include <QLabel>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+
+#include "../models/schedule.h"
 
 class ScheduleListCell : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ScheduleListCell(QWidget *parent = nullptr);
+    ScheduleListCell(const Schedule& schedule, QWidget* parent = nullptr);
 
 signals:
 };
