@@ -8,29 +8,36 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QDateTime>
+#include <QMessageBox>
 
 #include "../models/schedule.h"
+#include "../models/schedulemanager.h"
+#include "../resources/styles/colors.h"
 
 class ScheduleDetailView : public QDialog
 {
     Q_OBJECT
 public:
-    explicit ScheduleDetailView(const Schedule& schedule, QWidget* parent = nullptr);
+    explicit ScheduleDetailView(const Schedule& schedule, ScheduleManager* manager, QWidget* parent);
 
 private:
     const Schedule m_schedule;
+    ScheduleManager* m_scheduleManager;
 
     QLabel* m_titleLabel;
     QLabel* m_timeLabel;
     QLabel* m_locationLabel;
     QLabel* m_memoLabel;
     QLabel* m_categoryColorBox;
-    // QPushButton* m_editButton, m_deleteButton 등 추가
+    QPushButton* m_editButton;
+    QPushButton* m_deleteButton;
 
     void setupUI();
     void updateUI();
+    void onDeleteClicked();
 
 signals:
+    void scheduleDeleted(int scheduleId);
 };
 
 #endif // SCHEDULEDETAILVIEW_H

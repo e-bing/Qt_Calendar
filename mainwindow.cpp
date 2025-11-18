@@ -23,10 +23,10 @@ MainWindow::MainWindow(QWidget *parent)
     layout->addWidget(calendar);
 
     QString dbPath = QCoreApplication::applicationDirPath() + "/database/schedule.db";
-    ScheduleManager* scheduleManager = new ScheduleManager(dbPath, this);
+    scheduleManager = new ScheduleManager(dbPath, this);
 
     // test code
-    // Schedule* a = new Schedule(1, QString("일정이름"), QDateTime::currentDateTime(), QDateTime::currentDateTime(),
+    // Schedule* a = new Schedule(1, QString("일정 이름1"), QDateTime::currentDateTime(), QDateTime::currentDateTime(),
     //                            QString("서울"), QString("놀러감"));
 
 
@@ -55,7 +55,13 @@ MainWindow::MainWindow(QWidget *parent)
 void MainWindow::handleDateSelected(const QDate& date)
 {
     QList<Schedule> schedules = calendar->showSchedulesForDate(date); // 일정 리스트 가져오기
-    ScheduleListView* listView = new ScheduleListView(schedules, date, this);
+    ScheduleListView* listView = new ScheduleListView(schedules, date, scheduleManager, this);
+
+    connect(listView, &ScheduleListView::scheduleDeleted, this, [this](int scheduleId) {
+        QList<Schedule> allSchedules = scheduleManager->getAllSchedules();
+        calendar->setSchedules(allSchedules);
+    });
+
     listView->exec();
 }
 
