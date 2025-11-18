@@ -10,9 +10,9 @@ public:
     Category(int id, const QString& title, const QString& color);
 
     // getter functions
-    int id();
-    QString title();
-    QString color();
+    int id() const;
+    QString title() const;
+    QString color() const;
 
     // setter functions
     void setId(int num);
