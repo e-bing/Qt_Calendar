@@ -5,6 +5,7 @@
 #include <QList>
 #include <QLabel>
 #include "../models/schedule.h"
+#include "../resources/styles/colors.h"
 
 class QListWidget;
 

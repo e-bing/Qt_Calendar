@@ -4,18 +4,29 @@
 #include <QListWidget>
 #include <QVBoxLayout>
 
-ScheduleListView::ScheduleListView(const QList<Schedule>& schedules, QWidget *parent)
+ScheduleListView::ScheduleListView(const QList<Schedule>& schedules, const QDate& date, QWidget *parent)
     : QDialog(parent), m_schedules(schedules)
 {
     setupUI();
+    m_dateLabel->setText(date.toString("yyyy-MM-dd") + " 일정 목록");
     populateSchedules();
 }
 
 void ScheduleListView::setupUI()
 {
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    this->setStyleSheet("background-color: " + COLOR_BACKGROUND);
 
+    QVBoxLayout* layout = new QVBoxLayout(this);
     m_listWidget = new QListWidget(this);
+
+    m_dateLabel = new QLabel(this);
+    QFont font = m_dateLabel->font();
+    font.setPointSize(12);
+    font.setBold(true);
+    m_dateLabel->setFont(font);
+    m_dateLabel->setAlignment(Qt::AlignCenter);
+
+    layout->addWidget(m_dateLabel);
     layout->addWidget(m_listWidget);
 
     setLayout(layout);
