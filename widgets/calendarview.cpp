@@ -88,14 +88,15 @@ QList<Schedule> CalendarView::findSchedulesForDate(const QDate& date) const
 }
 
 
-void CalendarView::showSchedulesForDate(const QDate& date)
+QList<Schedule> CalendarView::showSchedulesForDate(const QDate& date) const
 {
+    QList<Schedule> result;
     for (const auto& schedule : m_schedules) {
         if (schedule.startTime().date() == date) {
-            emit scheduleSelected(schedule);
-            break;
+            result.append(schedule);
         }
     }
+    return result;
 }
 
 void CalendarView::onDateChanged(const QDate& date) {

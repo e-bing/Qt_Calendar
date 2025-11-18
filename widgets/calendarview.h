@@ -20,7 +20,7 @@ class CalendarView : public QCalendarWidget
 
 public:
     explicit CalendarView(QWidget *parent = nullptr);
-
+    QList<Schedule> showSchedulesForDate(const QDate& date) const;
     void setSchedules(const QList<Schedule>& schedules);
 
 signals:
@@ -36,7 +36,6 @@ protected:
 private:
     QList<Schedule> m_schedules;
 
-    void showSchedulesForDate(const QDate& date);
     QList<Schedule> findSchedulesForDate(const QDate& date) const;
 };
 
