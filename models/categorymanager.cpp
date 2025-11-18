@@ -8,8 +8,11 @@
 CategoryManager::CategoryManager(const QString &dbPath, QObject *parent)
     : QObject(parent), m_dbPath(dbPath)
 {
-    m_database = QSqlDatabase::addDatabase("QSQLITE");
-    m_database.setDatabaseName(m_dbPath);
+    if (!QSqlDatabase::contains("category_connection"))
+    {
+        m_database = QSqlDatabase::addDatabase("QSQLITE", "category_connection");
+        m_database.setDatabaseName(m_dbPath);
+    }
 }
 
 // CategoryView를 위한 함수 추가 (updateCategory, deleteCategory)
@@ -34,7 +37,8 @@ bool CategoryManager::deleteCategory(int id)
 
 CategoryManager::~CategoryManager()
 {
-    closeDatabase();
+    QSqlDatabase::database("category_connection").close();
+    QSqlDatabase::removeDatabase("category_connection");
 }
 
 bool CategoryManager::openDatabase()
