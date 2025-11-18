@@ -2,10 +2,13 @@
 #define CATEGORYVIEW_H
 
 #include <QWidget>
+#include "ui_categoryview.h"
 
-#include "../models/category.h"
-#include "../models/categorymanager.h"
-#include "categoryform.h"
+#include "./models/category.h"
+#include "./models/categorymanager.h"
+#include "./widgets/categoryform.h"
+
+
 
 namespace Ui {
 class CategoryView;
@@ -19,18 +22,17 @@ public:
     explicit CategoryView(QWidget *parent = nullptr);
     ~CategoryView();
 
+private:
+    Ui::CategoryView *ui;
+    CategoryManager *m_manager;
+    QVector<Category> m_list;
+
+    void loadCategories();
+
 private slots:
     void on_btnAdd_clicked();
     void on_btnEdit_clicked();
     void on_btnDelete_clicked();
-
-private:
-    void loadCategories();   // 테이블 새로고침
-
-private:
-    Ui::CategoryView *ui;
-    CategoryManager *m_manager;
-    QList<Category> m_list; // 현재 테이블에 표시된 목록 저장
 };
 
 #endif // CATEGORYVIEW_H
