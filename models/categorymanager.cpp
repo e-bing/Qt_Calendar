@@ -8,13 +8,17 @@
 CategoryManager::CategoryManager(const QString &dbPath, QObject *parent)
     : QObject(parent), m_dbPath(dbPath)
 {
-    m_database = QSqlDatabase::addDatabase("QSQLITE");
-    m_database.setDatabaseName(m_dbPath);
+    if (!QSqlDatabase::contains("category_connection"))
+    {
+        m_database = QSqlDatabase::addDatabase("QSQLITE", "category_connection");
+        m_database.setDatabaseName(m_dbPath);
+    }
 }
 
 CategoryManager::~CategoryManager()
 {
-    closeDatabase();
+    QSqlDatabase::database("category_connection").close();
+    QSqlDatabase::removeDatabase("category_connection");
 }
 
 bool CategoryManager::openDatabase()
