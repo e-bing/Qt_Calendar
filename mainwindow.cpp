@@ -39,6 +39,22 @@ MainWindow::MainWindow(QWidget *parent)
     // test code
     // scheduleManager->addSchedule(*a);
 
+    // test code
+    QString categoryDbPath = QCoreApplication::applicationDirPath() + "/database/category.db";
+    categoryManager = new CategoryManager(categoryDbPath, this);
+
+    if (!categoryManager->openDatabase()) {
+        qDebug() << "카테고리 데이터베이스 열기 실패";
+        // 에러 처리
+        return;
+    }
+
+    // test code
+    // Category* b = new Category(1, QString("개인"), QString("#a3d6b1"));
+    // Category* c = new Category(2, QString("회사"), QString("#a3bad6"));
+    // categoryManager->addCategory(*b);
+    // categoryManager->addCategory(*c);
+
     // 스케줄 매니저에서 목록 할당
     QList<Schedule> schedules = scheduleManager->getAllSchedules();
     calendar->setSchedules(schedules);

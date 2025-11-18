@@ -5,6 +5,7 @@
 
 #include "./widgets/calendarview.h"
 #include "./models/schedulemanager.h"
+#include "./models/categorymanager.h"
 #include "./widgets/schedulelistview.h"
 
 QT_BEGIN_NAMESPACE
@@ -25,6 +26,7 @@ private:
     Ui::MainWindow *ui;
     ScheduleManager* scheduleManager;
     CalendarView* calendar;
+    CategoryManager* categoryManager;
 
     void handleDateSelected(const QDate& date);
 };
