@@ -17,6 +17,7 @@ CalendarView::CalendarView(QWidget *parent)
                       "}"
                       "QCalendarWidget QAbstractItemView {"
                       "    selection-background-color: %3;"  // 날짜 선택 배경색
+                      // "    color: transparent;"
                       "}"
                       "QCalendarWidget QHeaderView::section {"
                       "    background-color: %4;"     // 요일 헤더 배경색
@@ -32,7 +33,7 @@ CalendarView::CalendarView(QWidget *parent)
     this->setStyleSheet(qss);
 
     // 날짜 선택 시 시그널 연결
-    connect(this, &QCalendarWidget::selectionChanged, this, [this]() {
+    connect(this, &QCalendarWidget::clicked, this, [this]() {
         QDate selectedDate = this->selectedDate();
         emit dateSelected(selectedDate);
         showSchedulesForDate(selectedDate);
@@ -48,6 +49,8 @@ void CalendarView::setSchedules(const QList<Schedule>& schedules)
 
 void CalendarView::paintCell(QPainter *painter, const QRect &rect, QDate date) const
 {
+
+    // QCalendarWidget::paintCell(painter, rect, date);
     bool isCurrentMonth = (date.month() == this->monthShown()) && (date.year() == this->yearShown());
 
     painter->save();
@@ -55,7 +58,7 @@ void CalendarView::paintCell(QPainter *painter, const QRect &rect, QDate date) c
     dateFont.setBold(true);
     painter->setFont(dateFont);
     QRect dateRect(rect.left(), rect.top()+4, rect.width(), 24);
-    // 회색 색상 추가 필요
+
     QColor textColor = isCurrentMonth ? QColor(COLOR_BLACK) : QColor(COLOR_GRAY);
     painter->setPen(textColor);
 
@@ -93,7 +96,7 @@ void CalendarView::paintCell(QPainter *painter, const QRect &rect, QDate date) c
     }
 
     painter->save();
-    // 회색 색상 추가 필요
+
     QColor penColor = QColor(COLOR_GRAY_LIGHT);
     QPen thinPen(penColor);
     thinPen.setWidth(1);
@@ -119,7 +122,7 @@ QList<Schedule> CalendarView::showSchedulesForDate(const QDate& date) const
 {
     QList<Schedule> result;
     for (const auto& schedule : m_schedules) {
-        if (schedule.startTime().date() == date) {
+        if (date >= schedule.startTime().date() && date <= schedule.endTime().date()) {
             result.append(schedule);
         }
     }

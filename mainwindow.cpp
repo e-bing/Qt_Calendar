@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     QVBoxLayout* layout = new QVBoxLayout(centralWidget);
 
-    CalendarView* calendar = new CalendarView(this);
+    calendar = new CalendarView(this);
     layout->addWidget(calendar);
 
     QString dbPath = QCoreApplication::applicationDirPath() + "/database/schedule.db";

@@ -4,7 +4,10 @@
 #include <QDialog>
 #include <QList>
 #include <QLabel>
+#include <QListWidget>
+#include <QVBoxLayout>
 #include "../models/schedule.h"
+#include "scheduledetailview.h"
 #include "../resources/styles/colors.h"
 
 class QListWidget;
