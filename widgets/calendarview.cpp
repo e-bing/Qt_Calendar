@@ -1,14 +1,13 @@
 #include "calendarview.h"
 
 CalendarView::CalendarView(QWidget *parent)
-    : QWidget{parent}, m_calendar(new QCalendarWidget(this))
+    : QCalendarWidget{parent}
 {
-    QVBoxLayout* layout = new QVBoxLayout(this);
-    layout->addWidget(m_calendar);
+    setVerticalHeaderFormat(QCalendarWidget::NoVerticalHeader);
 
     // 날짜 선택 시 시그널 연결
-    connect(m_calendar, &QCalendarWidget::selectionChanged, this, [this]() {
-        QDate selectedDate = m_calendar->selectedDate();
+    connect(this, &QCalendarWidget::selectionChanged, this, [this]() {
+        QDate selectedDate = this->selectedDate();
         emit dateSelected(selectedDate);
         showSchedulesForDate(selectedDate);
     });
@@ -17,32 +16,77 @@ CalendarView::CalendarView(QWidget *parent)
 void CalendarView::setSchedules(const QList<Schedule>& schedules)
 {
     m_schedules = schedules;
-    highlightScheduleDates();
+    updateCells();
+    update();
 }
 
-void CalendarView::highlightScheduleDates()
+void CalendarView::paintCell(QPainter *painter, const QRect &rect, QDate date) const
 {
-    // 달력의 모든 날짜 형식 초기화
-    QTextCharFormat defaultFormat;
-    m_calendar->setDateTextFormat(QDate(), defaultFormat);
+    bool isCurrentMonth = (date.month() == this->monthShown()) && (date.year() == this->yearShown());
 
-    // 일정이 있는 날짜들을 하이라이트
-    QColor color(COLOR_PRIMARY);
-    QBrush brush(color);
-    QTextCharFormat highlightFormat;
-    highlightFormat.setBackground(brush);
+    painter->save();
+    QFont dateFont = painter->font();
+    dateFont.setBold(true);
+    painter->setFont(dateFont);
+    QRect dateRect(rect.left(), rect.top()+4, rect.width(), 24);
+    // 회색 색상 추가 필요
+    QColor textColor = isCurrentMonth ? QColor(COLOR_BLACK) : QColor(Qt::gray);
+    painter->setPen(textColor);
 
-    QSet<QDate> datesWithSchedules;
-    for (const auto& schedule : m_schedules) {
-        // 일정 시작일부터 종료일까지 모두 하이라이트 처리
-        QDate startDate = schedule.startTime().date();
-        datesWithSchedules.insert(startDate);
+    painter->drawText(dateRect, Qt::AlignHCenter | Qt::AlignTop, QString::number(date.day()));
+    painter->restore();
+
+    auto schedules = findSchedulesForDate(date);
+    int marginX = 2;
+    int marginY = 24;
+    int boxWidth = rect.width() - 2*marginX;
+    int boxHeight = 18;
+    int spacing = 2;
+
+    for (int i = 0; i < schedules.size(); ++i) {
+        QRect boxRect(
+            rect.left() + (rect.width() - boxWidth)/2,
+            rect.top() + marginY + i*(boxHeight+spacing),
+            boxWidth,
+            boxHeight
+            );
+
+        painter->save();
+        // 박스 색상 카테고리별로 설정 필요
+        QColor boxColor = QColor(COLOR_PRIMARY);
+        painter->setBrush(boxColor);
+        painter->setPen(Qt::NoPen);
+        painter->drawRoundedRect(boxRect, 4, 4);
+
+        QFont textFont = painter->font();
+        textFont.setPointSize(9);
+        painter->setFont(textFont);
+        painter->setPen(Qt::black);
+        painter->drawText(boxRect.adjusted(4, 0, -4, 0), Qt::AlignVCenter | Qt::AlignLeft, schedules[i].title());
+        painter->restore();
     }
 
-    for (const QDate& date : datesWithSchedules) {
-        m_calendar->setDateTextFormat(date, highlightFormat);
-    }
+    painter->save();
+    // 회색 색상 추가 필요
+    QPen thinPen(QColor(220,220,220));
+    thinPen.setWidth(1);
+    painter->setPen(thinPen);
+    painter->setBrush(Qt::NoBrush);
+
+    painter->drawRect(rect.adjusted(0, 0, 0, 0));
+    painter->restore();
 }
+
+QList<Schedule> CalendarView::findSchedulesForDate(const QDate& date) const
+{
+    QList<Schedule> result;
+    for (const auto& s : m_schedules) {
+        if (date >= s.startTime().date() && date <= s.endTime().date())
+            result.append(s);
+    }
+    return result;
+}
+
 
 void CalendarView::showSchedulesForDate(const QDate& date)
 {
