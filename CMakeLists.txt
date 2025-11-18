@@ -21,11 +21,24 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Sql)
 
+
+set(SOURCES
+
+    models/category.cpp
+    models/category.h
+    models/categorymanager.cpp
+    models/categorymanager.h
+)
+
+
 set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
+        categoryview.h
+        categoryview.ui
+        categoryview.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -42,8 +55,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         models/schedulemanager.h models/schedulemanager.cpp
         models/categorymanager.h models/categorymanager.cpp
         resources/styles/colors.h
-        widgets/categoryview.h widgets/categoryview.cpp
+
         resources/resources.qrc
+        categoryview.h categoryview.cpp categoryview.ui
+
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET ScheduleManagerApp APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

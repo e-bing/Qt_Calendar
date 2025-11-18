@@ -1,9 +1,9 @@
-#include "categoryview.h"
-#include "ui_categoryview.h"
+#include "./categoryview.h"
+#include "./ui_categoryview.h"
 
-#include "../models/category.h"
-#include "../models/categorymanager.h"
-#include "../widgets/categoryform.h"
+#include "./models/category.h"
+#include "./models/categorymanager.h"
+#include "./widgets/categoryform.h"
 
 CategoryView::CategoryView(QWidget *parent)
     : QWidget(parent)
@@ -60,7 +60,9 @@ void CategoryView::on_btnEdit_clicked()
     form.setCategory(m_list[row]); // 기존 데이터 삽입
 
     if (form.exec() == QDialog::Accepted) {
-        m_manager->updateCategory(form.category());
+        Category updated = form.category();
+        updated.setId(m_list[row].id());
+        m_manager->updateCategory(updated);
         loadCategories();
     }
 }
