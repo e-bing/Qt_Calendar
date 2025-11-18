@@ -17,15 +17,20 @@ class ScheduleListView : public QDialog
 {
     Q_OBJECT
 public:
-    explicit ScheduleListView(const QList<Schedule>& schedules, const QDate& date, QWidget *parent = nullptr);
+    explicit ScheduleListView(const QList<Schedule>& schedules, const QDate& date, ScheduleManager* manager, QWidget *parent = nullptr);
 
 private:
     QLabel* m_dateLabel;
     QListWidget* m_listWidget;
     QList<Schedule> m_schedules;
+    ScheduleManager* m_scheduleManager;
 
     void setupUI();
     void populateSchedules();
+    void onScheduleDeleted(int scheduleId);
+
+signals:
+    void scheduleDeleted(int scheduleId);
 };
 
 #endif // SCHEDULELISTVIEW_H

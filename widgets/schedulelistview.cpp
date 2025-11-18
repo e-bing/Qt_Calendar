@@ -1,7 +1,7 @@
 #include "schedulelistview.h"
 
-ScheduleListView::ScheduleListView(const QList<Schedule>& schedules, const QDate& date, QWidget *parent)
-    : QDialog(parent), m_schedules(schedules)
+ScheduleListView::ScheduleListView(const QList<Schedule>& schedules, const QDate& date, ScheduleManager* manager, QWidget *parent)
+    : QDialog(parent), m_schedules(schedules), m_scheduleManager(manager)
 {
     setupUI();
     m_dateLabel->setText(date.toString("yyyy-MM-dd"));
@@ -10,7 +10,9 @@ ScheduleListView::ScheduleListView(const QList<Schedule>& schedules, const QDate
     connect(m_listWidget, &QListWidget::itemClicked, this, [this](QListWidgetItem* item){
         int idx = m_listWidget->row(item);
         if (idx >= 0 && idx < m_schedules.size()) {
-            ScheduleDetailView* detail = new ScheduleDetailView(m_schedules[idx], this);
+            ScheduleDetailView* detail = new ScheduleDetailView(m_schedules[idx], m_scheduleManager, this);
+            connect(detail, &ScheduleDetailView::scheduleDeleted, this, &ScheduleListView::scheduleDeleted);
+            connect(detail, &ScheduleDetailView::scheduleDeleted, this, &ScheduleListView::onScheduleDeleted);
             detail->exec();
         }
     });
@@ -56,3 +58,13 @@ void ScheduleListView::populateSchedules()
     }
 }
 
+void ScheduleListView::onScheduleDeleted(int scheduleId)
+{
+    for (int i = 0; i < m_schedules.size(); ++i) {
+        if (m_schedules[i].id() == scheduleId) {
+            m_schedules.removeAt(i);
+            break;
+        }
+    }
+    populateSchedules();
+}
