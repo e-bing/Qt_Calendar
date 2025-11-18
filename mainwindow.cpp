@@ -43,8 +43,8 @@ MainWindow::MainWindow(QWidget *parent)
     calendar->setSchedules(schedules);
 
     // // 날짜 선택 시 처리
-    // connect(calendar, &CalendarView::dateSelected,
-    //         this, &MainWindow::handleDateSelected);
+    connect(calendar, &CalendarView::dateSelected,
+            this, &MainWindow::handleDateSelected);
 
     // // 일정 선택 시 처리
     // connect(calendar, &CalendarView::scheduleSelected,
@@ -53,9 +53,9 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::handleDateSelected(const QDate& date)
 {
-    // QList<Schedule> schedules = calendar->showSchedulesForDate(date); // 일정 리스트 가져오기
-    // ScheduleListView* listView = new ScheduleListView(schedules, this);
-    // listView->exec(); // 혹은 show() (show는 비모달)
+    QList<Schedule> schedules = calendar->showSchedulesForDate(date); // 일정 리스트 가져오기
+    ScheduleListView* listView = new ScheduleListView(schedules, this);
+    listView->exec();
 }
 
 MainWindow::~MainWindow()

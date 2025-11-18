@@ -6,11 +6,11 @@ CalendarView::CalendarView(QWidget *parent)
     setVerticalHeaderFormat(QCalendarWidget::NoVerticalHeader);
 
     // 날짜 선택 시 시그널 연결
-    // connect(this, &QCalendarWidget::selectionChanged, this, [this]() {
-    //     QDate selectedDate = this->selectedDate();
-    //     emit dateSelected(selectedDate);
-    //     showSchedulesForDate(selectedDate);
-    // });
+    connect(this, &QCalendarWidget::selectionChanged, this, [this]() {
+        QDate selectedDate = this->selectedDate();
+        emit dateSelected(selectedDate);
+        showSchedulesForDate(selectedDate);
+    });
 }
 
 void CalendarView::setSchedules(const QList<Schedule>& schedules)
