@@ -7,6 +7,7 @@
 #include <QVBoxLayout>
 
 #include "../models/schedule.h"
+#include "../resources/styles/colors.h"
 
 class ScheduleListCell : public QWidget
 {
