@@ -9,6 +9,7 @@
 #include "../models/schedule.h"
 #include "scheduledetailview.h"
 #include "schedulelistcell.h"
+#include "scheduleform.h"
 #include "../resources/styles/colors.h"
 
 class QListWidget;
@@ -29,6 +30,9 @@ private:
     void setupUI();
     void populateSchedules();
     void onScheduleDeleted(int scheduleId);
+
+private slots:
+    void onAddButtonClicked();
 
 signals:
     void scheduleDeleted(int scheduleId);
