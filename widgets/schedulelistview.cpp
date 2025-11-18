@@ -6,5 +6,5 @@
 ScheduleListView::ScheduleListView(QWidget *parent)
     : QWidget{parent}
 {
-    qDebug() << "일정 목록 열림" << Qt::endl;
+    // qDebug() << "일정 목록 열림" << Qt::endl;
 }

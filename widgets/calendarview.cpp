@@ -6,11 +6,11 @@ CalendarView::CalendarView(QWidget *parent)
     setVerticalHeaderFormat(QCalendarWidget::NoVerticalHeader);
 
     // 날짜 선택 시 시그널 연결
-    connect(this, &QCalendarWidget::selectionChanged, this, [this]() {
-        QDate selectedDate = this->selectedDate();
-        emit dateSelected(selectedDate);
-        showSchedulesForDate(selectedDate);
-    });
+    // connect(this, &QCalendarWidget::selectionChanged, this, [this]() {
+    //     QDate selectedDate = this->selectedDate();
+    //     emit dateSelected(selectedDate);
+    //     showSchedulesForDate(selectedDate);
+    // });
 }
 
 void CalendarView::setSchedules(const QList<Schedule>& schedules)
@@ -30,7 +30,7 @@ void CalendarView::paintCell(QPainter *painter, const QRect &rect, QDate date) c
     painter->setFont(dateFont);
     QRect dateRect(rect.left(), rect.top()+4, rect.width(), 24);
     // 회색 색상 추가 필요
-    QColor textColor = isCurrentMonth ? QColor(COLOR_BLACK) : QColor(Qt::gray);
+    QColor textColor = isCurrentMonth ? QColor(COLOR_BLACK) : QColor(COLOR_GRAY);
     painter->setPen(textColor);
 
     painter->drawText(dateRect, Qt::AlignHCenter | Qt::AlignTop, QString::number(date.day()));
@@ -68,7 +68,8 @@ void CalendarView::paintCell(QPainter *painter, const QRect &rect, QDate date) c
 
     painter->save();
     // 회색 색상 추가 필요
-    QPen thinPen(QColor(220,220,220));
+    QColor penColor = QColor(COLOR_GRAY_LIGHT);
+    QPen thinPen(penColor);
     thinPen.setWidth(1);
     painter->setPen(thinPen);
     painter->setBrush(Qt::NoBrush);

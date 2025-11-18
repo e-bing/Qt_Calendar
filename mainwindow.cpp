@@ -51,6 +51,13 @@ MainWindow::MainWindow(QWidget *parent)
     //         this, &MainWindow::handleScheduleSelected);
 }
 
+void MainWindow::handleDateSelected(const QDate& date)
+{
+    // QList<Schedule> schedules = calendar->showSchedulesForDate(date); // 일정 리스트 가져오기
+    // ScheduleListView* listView = new ScheduleListView(schedules, this);
+    // listView->exec(); // 혹은 show() (show는 비모달)
+}
+
 MainWindow::~MainWindow()
 {
     delete ui;
