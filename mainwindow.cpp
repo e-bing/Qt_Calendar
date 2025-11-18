@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    this->setStyleSheet("background-color: " + COLOR_BACKGROUND);
 
     QWidget* centralWidget = new QWidget(this);
     setCentralWidget(centralWidget);
@@ -54,7 +55,7 @@ MainWindow::MainWindow(QWidget *parent)
 void MainWindow::handleDateSelected(const QDate& date)
 {
     QList<Schedule> schedules = calendar->showSchedulesForDate(date); // 일정 리스트 가져오기
-    ScheduleListView* listView = new ScheduleListView(schedules, this);
+    ScheduleListView* listView = new ScheduleListView(schedules, date, this);
     listView->exec();
 }
 

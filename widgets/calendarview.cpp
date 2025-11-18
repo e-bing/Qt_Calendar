@@ -5,6 +5,32 @@ CalendarView::CalendarView(QWidget *parent)
 {
     setVerticalHeaderFormat(QCalendarWidget::NoVerticalHeader);
 
+    QString qss = QString(
+                      "QCalendarWidget QWidget#qt_calendar_navigationbar {"
+                      "    background-color: %1;"      // 상단 바 배경색
+                      "    height: 12px;"
+                      "}"
+                      "QCalendarWidget QToolButton {"
+                      "    color: %2;"                   // 상단 바 버튼 글자색
+                      "    background: transparent;"
+                      "    border: none;"
+                      "}"
+                      "QCalendarWidget QAbstractItemView {"
+                      "    selection-background-color: %3;"  // 날짜 선택 배경색
+                      "}"
+                      "QCalendarWidget QHeaderView::section {"
+                      "    background-color: %4;"     // 요일 헤더 배경색
+                      "    color: %5;"                  // 요일 텍스트 색상
+                      "    height: 10px;"
+                      "}"
+                      ).arg(COLOR_BACKGROUND) // 상단 바 배경색
+                      .arg(COLOR_BLACK) // 상단 바 버튼 글자색
+                      .arg(COLOR_SECONDARY) // 날짜 선택 배경색
+                      .arg(COLOR_SECONDARY) // 요일 헤더 배경색
+                      .arg(COLOR_BLACK); // 요일 텍스트 색상
+
+    this->setStyleSheet(qss);
+
     // 날짜 선택 시 시그널 연결
     connect(this, &QCalendarWidget::selectionChanged, this, [this]() {
         QDate selectedDate = this->selectedDate();
