@@ -24,6 +24,7 @@ private:
     QListWidget* m_listWidget;
     QList<Schedule> m_schedules;
     ScheduleManager* m_scheduleManager;
+    QPushButton* m_addButton;
 
     void setupUI();
     void populateSchedules();

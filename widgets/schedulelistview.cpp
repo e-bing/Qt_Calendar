@@ -35,6 +35,9 @@ void ScheduleListView::setupUI()
     layout->addWidget(m_dateLabel);
     layout->addWidget(m_listWidget);
 
+    m_addButton = new QPushButton("+", this);
+    layout->addWidget(m_addButton);
+
     setLayout(layout);
     setWindowTitle("일정 목록");
     resize(400, 300);
