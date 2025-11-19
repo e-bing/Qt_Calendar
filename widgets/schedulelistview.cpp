@@ -10,7 +10,7 @@ ScheduleListView::ScheduleListView(const QList<Schedule>& schedules, const QDate
     connect(m_listWidget, &QListWidget::itemClicked, this, [this](QListWidgetItem* item){
         int idx = m_listWidget->row(item);
         if (idx >= 0 && idx < m_schedules.size()) {
-            ScheduleDetailView* detail = new ScheduleDetailView(m_schedules[idx], m_scheduleManager, this);
+            ScheduleDetailView* detail = new ScheduleDetailView(m_schedules[idx], m_scheduleManager, m_categoryManager, this);
             connect(detail, &ScheduleDetailView::scheduleDeleted, this, &ScheduleListView::scheduleDeleted);
             connect(detail, &ScheduleDetailView::scheduleDeleted, this, &ScheduleListView::onScheduleDeleted);
             detail->exec();
@@ -76,8 +76,7 @@ void ScheduleListView::onScheduleDeleted(int scheduleId)
 
 void ScheduleListView::onAddButtonClicked()
 {
-    QList<Category> categories = m_categoryManager->getAllCategories();
-    ScheduleForm* form = new ScheduleForm(categories, this);
+    ScheduleForm* form = new ScheduleForm(m_categoryManager, this);
 
     if (form->exec() == QDialog::Accepted) {
         Schedule newSchedule = form->getSchedule();

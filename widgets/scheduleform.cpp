@@ -4,15 +4,54 @@
 #include <QLabel>
 #include <QMessageBox>
 
-ScheduleForm::ScheduleForm(const QList<Category>& categories, QWidget* parent)
-    : QDialog(parent), m_categories(categories)
+ScheduleForm::ScheduleForm(CategoryManager* categoryManager, QWidget* parent)
+    : QDialog(parent), m_categoryManager(categoryManager)
 {
+    if (m_categoryManager) {
+        m_categories = m_categoryManager->getAllCategories();
+    }
+
     setupUI();
 
     connectSignals();
     setWindowTitle("일정 추가");
     setFixedSize(400, 500);
 }
+
+ScheduleForm::ScheduleForm(const Schedule& schedule, CategoryManager* categoryManager, QWidget* parent)
+    : QDialog(parent), m_categoryManager(categoryManager)
+{
+    if (m_categoryManager) {
+        m_categories = m_categoryManager->getAllCategories();
+    }
+
+    setupUI();
+
+    m_titleEdit->setText(schedule.title());
+    m_startEdit->setDateTime(schedule.startTime());
+    m_endEdit->setDateTime(schedule.endTime());
+    m_locationEdit->setText(schedule.location());
+    m_memoEdit->setPlainText(schedule.memo());
+
+    for (const Category& cat : m_categories) {
+        m_categoryCombo->addItem(cat.title());
+    }
+
+    // 기존 카테고리 선택 index 설정
+    int index = 0;
+    for (int i = 0; i < m_categories.size(); ++i) {
+        if (m_categories[i].id() == schedule.categoryId()) {
+            index = i;
+            break;
+        }
+    }
+    m_categoryCombo->setCurrentIndex(index);
+
+    connectSignals();
+    setWindowTitle("일정 수정");
+    setFixedSize(400, 500);
+}
+
 
 void ScheduleForm::setupUI()
 {
