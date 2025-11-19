@@ -70,7 +70,7 @@ void MainWindow::handleDateSelected(const QDate& date)
     QList<Schedule> schedules = calendar->showSchedulesForDate(date); // 일정 리스트 가져오기
     ScheduleListView* listView = new ScheduleListView(schedules, date, scheduleManager, categoryManager, this);
 
-    connect(listView, &ScheduleListView::scheduleDeleted, this, [this](int scheduleId) {
+    connect(listView, &ScheduleListView::scheduleUpdated, this, [this](int scheduleId) {
         QList<Schedule> allSchedules = scheduleManager->getAllSchedules();
         calendar->setSchedules(allSchedules);
     });

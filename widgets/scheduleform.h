@@ -22,6 +22,7 @@ public:
     Schedule getSchedule() const;
 
 private:
+    int m_scheduleId = -1;
     QLineEdit* m_titleEdit;
     QDateTimeEdit* m_startEdit;
     QDateTimeEdit* m_endEdit;

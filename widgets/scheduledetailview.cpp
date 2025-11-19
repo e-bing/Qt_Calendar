@@ -115,14 +115,11 @@ void ScheduleDetailView::onEditClicked()
     ScheduleForm editForm(m_schedule, m_categoryManager, this);
     if (editForm.exec() == QDialog::Accepted) {
         Schedule updatedSchedule = editForm.getSchedule();
-        qDebug() << "Emit scheduleUpdated, updatedId:" << updatedSchedule.id();
 
         if (m_scheduleManager && m_scheduleManager->updateSchedule(updatedSchedule)) {
             m_schedule = updatedSchedule;
             updateUI();
             QMessageBox::information(this, "성공", "일정이 수정되었습니다.");
-            qDebug() << "Emit scheduleUpdated, updatedId:" << updatedSchedule.id();
-            qDebug() << "Emit scheduleUpdated, scheduleId:" << m_schedule.id();
             emit scheduleUpdated(m_schedule.id(), m_schedule);
         } else {
             QMessageBox::warning(this, "실패", "일정 수정에 실패했습니다.");

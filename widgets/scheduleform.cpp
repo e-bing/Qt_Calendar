@@ -19,7 +19,7 @@ ScheduleForm::ScheduleForm(CategoryManager* categoryManager, QWidget* parent)
 }
 
 ScheduleForm::ScheduleForm(const Schedule& schedule, CategoryManager* categoryManager, QWidget* parent)
-    : QDialog(parent), m_categoryManager(categoryManager)
+    : QDialog(parent), m_categoryManager(categoryManager), m_scheduleId(schedule.id())
 {
     if (m_categoryManager) {
         m_categories = m_categoryManager->getAllCategories();
@@ -156,9 +156,8 @@ Schedule ScheduleForm::getSchedule() const
         selectedCategoryId = m_categories[index].id();  // Category에서 id를 받아야 함
     }
 
-    // 임시 ID -1로 설정, 실제 DB 추가 시 고유 ID가 부여됨
     return Schedule(
-        -1,
+        m_scheduleId,
         m_titleEdit->text().trimmed(),
         m_startEdit->dateTime(),
         m_endEdit->dateTime(),

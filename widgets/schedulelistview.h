@@ -38,8 +38,8 @@ private slots:
     void onAddButtonClicked();
 
 signals:
-    void scheduleDeleted(int scheduleId);
-    void scheduleUpdated(int scheduleId, const Schedule& updatedSchedule);
+    void scheduleUpdated(int scheduleId);
+    // void scheduleUpdated(int scheduleId, const Schedule& updatedSchedule);
 };
 
 #endif // SCHEDULELISTVIEW_H

@@ -11,8 +11,9 @@ ScheduleListView::ScheduleListView(const QList<Schedule>& schedules, const QDate
         int idx = m_listWidget->row(item);
         if (idx >= 0 && idx < m_schedules.size()) {
             ScheduleDetailView* detail = new ScheduleDetailView(m_schedules[idx], m_scheduleManager, m_categoryManager, this);
-            connect(detail, &ScheduleDetailView::scheduleDeleted, this, &ScheduleListView::scheduleDeleted);
+            connect(detail, &ScheduleDetailView::scheduleDeleted, this, &ScheduleListView::scheduleUpdated);
             connect(detail, &ScheduleDetailView::scheduleDeleted, this, &ScheduleListView::onScheduleDeleted);
+            connect(detail, &ScheduleDetailView::scheduleUpdated, this, &ScheduleListView::scheduleUpdated);
             connect(detail, &ScheduleDetailView::scheduleUpdated, this, &ScheduleListView::onScheduleUpdated);
 
             detail->exec();
@@ -98,7 +99,7 @@ void ScheduleListView::onAddButtonClicked()
             // 성공 시 m_schedules에 추가 후 UI 갱신
             m_schedules.append(newSchedule);
             populateSchedules();
-            emit scheduleDeleted(newSchedule.id()); // 상위 알림용 신호 emit
+            emit scheduleUpdated(newSchedule.id()); // 상위 알림용 신호 emit
         } else {
             QMessageBox::warning(this, "추가 실패", "일정 추가에 실패했습니다.");
         }
