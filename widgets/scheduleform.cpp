@@ -3,6 +3,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QMessageBox>
+#include <QDebug> // 디버깅용으로 필요시 사용
 
 ScheduleForm::ScheduleForm(CategoryManager* categoryManager, QWidget* parent)
     : QDialog(parent), m_categoryManager(categoryManager)
@@ -170,7 +171,24 @@ Schedule ScheduleForm::getSchedule() const
 
 void ScheduleForm::onAddCategoryClicked()
 {
-    CategoryView dlg(m_categoryManager, this); // 필요 시 parent 지정
-    dlg.exec();                 // 다이얼로그 실행
-    // 추가/수정된 카테고리 내용 반영하려면 m_categories 갱신, 콤보박스 다시 로딩 필요
+    // CategoryView를 QDialog로 실행
+    CategoryView categoryViewDialog(m_categoryManager, this);
+    categoryViewDialog.exec(); // 모달 다이얼로그로 실행
+
+    // 다이얼로그 종료 후: ScheduleForm의 카테고리 목록과 콤보박스 갱신
+
+    // 1. 카테고리 매니저에서 최신 목록을 다시 불러옵니다.
+    if (m_categoryManager) {
+        m_categories = m_categoryManager->getAllCategories();
+    }
+
+    // 2. QComboBox의 기존 항목을 지웁니다.
+    m_categoryCombo->clear();
+
+    // 3. QComboBox에 최신 카테고리 목록을 다시 추가합니다.
+    for (const Category& cat : m_categories) {
+        m_categoryCombo->addItem(cat.title());
+    }
+
+    // (선택 사항: 만약 수정 중이었다면, 기존에 선택된 카테고리를 다시 선택하도록 로직을 추가할 수 있습니다.)
 }
