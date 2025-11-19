@@ -22,6 +22,7 @@ public:
     explicit ScheduleListView(const QList<Schedule>& schedules, const QDate& date, ScheduleManager* manager, CategoryManager* categoryManager, QWidget *parent = nullptr);
 
 private:
+    QDate m_date;
     QLabel* m_dateLabel;
     QListWidget* m_listWidget;
     QList<Schedule> m_schedules;
