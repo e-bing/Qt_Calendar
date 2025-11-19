@@ -71,7 +71,11 @@ void ScheduleForm::setupUI()
     m_endEdit = new QDateTimeEdit(QDateTime::currentDateTime(), this);
     m_endEdit->setCalendarPopup(true);
 
+    QHBoxLayout* categoryRowLayout = new QHBoxLayout;
     QLabel* categoryLabel = new QLabel("카테고리:", this);
+    m_addCategoryButton = new QPushButton("+", this);
+    m_addCategoryButton->setFixedSize(60, 24);
+
     m_categoryCombo = new QComboBox(this);
     for (const Category& cat : m_categories) {
         m_categoryCombo->addItem(cat.title());
@@ -100,7 +104,11 @@ void ScheduleForm::setupUI()
     mainLayout->addWidget(endLabel);
     mainLayout->addWidget(m_endEdit);
 
-    mainLayout->addWidget(categoryLabel);
+    categoryRowLayout->addWidget(categoryLabel);
+    categoryRowLayout->addStretch();
+    categoryRowLayout->addWidget(m_addCategoryButton);
+
+    mainLayout->addLayout(categoryRowLayout);
     mainLayout->addWidget(m_categoryCombo);
 
     mainLayout->addWidget(locationLabel);
@@ -122,6 +130,8 @@ void ScheduleForm::connectSignals()
 {
     connect(m_okButton, &QPushButton::clicked, this, &ScheduleForm::onOkClicked);
     connect(m_cancelButton, &QPushButton::clicked, this, &ScheduleForm::reject);
+    connect(m_addCategoryButton, &QPushButton::clicked, this, &ScheduleForm::onAddCategoryClicked);
+
 }
 
 void ScheduleForm::onOkClicked()
@@ -156,4 +166,11 @@ Schedule ScheduleForm::getSchedule() const
         m_memoEdit->toPlainText(),
         selectedCategoryId
         );
+}
+
+void ScheduleForm::onAddCategoryClicked()
+{
+    CategoryView dlg(m_categoryManager, this); // 필요 시 parent 지정
+    dlg.exec();                 // 다이얼로그 실행
+    // 추가/수정된 카테고리 내용 반영하려면 m_categories 갱신, 콤보박스 다시 로딩 필요
 }

@@ -11,6 +11,7 @@
 #include "../models/category.h"
 #include "../models/schedule.h"
 #include "../models/categorymanager.h"
+#include "../categoryview.h"
 
 class ScheduleForm : public QDialog
 {
@@ -31,12 +32,14 @@ private:
     QList<Category> m_categories;
     QPushButton* m_okButton;
     QPushButton* m_cancelButton;
+    QPushButton* m_addCategoryButton;
 
     void setupUI();
     void connectSignals();
 
 private slots:
     void onOkClicked();
+    void onAddCategoryClicked();
 };
 
 #endif // SCHEDULEFORM_H
