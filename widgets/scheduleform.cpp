@@ -35,7 +35,10 @@ ScheduleForm::ScheduleForm(const Schedule& schedule, CategoryManager* categoryMa
 
     m_categoryCombo->clear();
     for (const Category& cat : m_categories) {
-        m_categoryCombo->addItem(cat.title());
+        QPixmap pixmap(12, 12);
+        pixmap.fill(QColor(cat.color()));   // 카테고리 색상으로 픽스맵 채우기
+        QIcon icon(pixmap);
+        m_categoryCombo->addItem(icon, cat.title());
     }
 
     // 기존 카테고리 선택 index 설정
