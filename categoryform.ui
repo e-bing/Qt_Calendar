@@ -16,9 +16,9 @@
   <widget class="QPushButton" name="btnOk">
    <property name="geometry">
     <rect>
-     <x>380</x>
-     <y>150</y>
-     <width>93</width>
+     <x>410</x>
+     <y>190</y>
+     <width>40</width>
      <height>29</height>
     </rect>
    </property>
@@ -29,9 +29,9 @@
   <widget class="QPushButton" name="btnCancel">
    <property name="geometry">
     <rect>
-     <x>380</x>
-     <y>220</y>
-     <width>93</width>
+     <x>460</x>
+     <y>190</y>
+     <width>100</width>
      <height>29</height>
     </rect>
    </property>
@@ -42,19 +42,9 @@
   <widget class="QLineEdit" name="txtTitle">
    <property name="geometry">
     <rect>
-     <x>230</x>
+     <x>170</x>
      <y>150</y>
-     <width>113</width>
-     <height>26</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="txtColor">
-   <property name="geometry">
-    <rect>
-     <x>230</x>
-     <y>220</y>
-     <width>113</width>
+     <width>120</width>
      <height>26</height>
     </rect>
    </property>
@@ -62,7 +52,7 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>230</x>
+     <x>170</x>
      <y>120</y>
      <width>62</width>
      <height>20</height>
@@ -72,40 +62,43 @@
     <string>Title</string>
    </property>
   </widget>
+  <widget class="QLabel" name="lblColorPreview">
+   <property name="geometry">
+    <rect>
+     <x>410</x>
+     <y>150</y>
+     <width>120</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>color preview</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnSelectColor">
+   <property name="geometry">
+    <rect>
+     <x>310</x>
+     <y>150</y>
+     <width>80</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>색상선택</string>
+   </property>
+  </widget>
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>230</x>
-     <y>200</y>
-     <width>62</width>
+     <x>420</x>
+     <y>120</y>
+     <width>100</width>
      <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string>Color</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="txtId">
-   <property name="geometry">
-    <rect>
-     <x>300</x>
-     <y>80</y>
-     <width>113</width>
-     <height>26</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_3">
-   <property name="geometry">
-    <rect>
-     <x>330</x>
-     <y>50</y>
-     <width>62</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>ID</string>
+    <string>색상 미리보기</string>
    </property>
   </widget>
  </widget>

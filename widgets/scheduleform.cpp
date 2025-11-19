@@ -3,6 +3,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QMessageBox>
+#include <QDebug> // 디버깅용으로 필요시 사용
 
 ScheduleForm::ScheduleForm(CategoryManager* categoryManager, const QDate& defaultDate, QWidget* parent)
     : QDialog(parent), m_categoryManager(categoryManager)
@@ -178,7 +179,17 @@ Schedule ScheduleForm::getSchedule() const
 
 void ScheduleForm::onAddCategoryClicked()
 {
-    // CategoryView dlg(m_categoryManager, this); // 필요 시 parent 지정
-    // dlg.exec();                 // 다이얼로그 실행
-    // 추가/수정된 카테고리 내용 반영하려면 m_categories 갱신, 콤보박스 다시 로딩 필요
+    // CategoryView를 QDialog로 실행
+    CategoryView categoryViewDialog(m_categoryManager, this);
+    categoryViewDialog.exec(); // 모달 다이얼로그로 실행
+
+    if (m_categoryManager) {
+        m_categories = m_categoryManager->getAllCategories();
+    }
+
+    m_categoryCombo->clear();
+
+    for (const Category& cat : m_categories) {
+        m_categoryCombo->addItem(cat.title());
+    }
 }
