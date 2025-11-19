@@ -27,6 +27,7 @@ public:
 
     QList<Category> getAllCategories();
     Category categoryFromQuery(const QVariantMap &record);
+    Category getCategoryById(int id);
 
 signals:
     void databaseError(const QString &msg);

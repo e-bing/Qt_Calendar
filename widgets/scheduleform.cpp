@@ -5,7 +5,7 @@
 #include <QMessageBox>
 #include <QDebug> // 디버깅용으로 필요시 사용
 
-ScheduleForm::ScheduleForm(CategoryManager* categoryManager, QWidget* parent)
+ScheduleForm::ScheduleForm(CategoryManager* categoryManager, const QDate& defaultDate, QWidget* parent)
     : QDialog(parent), m_categoryManager(categoryManager)
 {
     if (m_categoryManager) {
@@ -14,13 +14,18 @@ ScheduleForm::ScheduleForm(CategoryManager* categoryManager, QWidget* parent)
 
     setupUI();
 
+    QDateTime defaultStart = QDateTime(defaultDate, QTime::currentTime());
+    QDateTime defaultEnd = defaultStart.addSecs(3600);
+    m_startEdit->setDateTime(defaultStart);
+    m_endEdit->setDateTime(defaultEnd);
+
     connectSignals();
     setWindowTitle("일정 추가");
     setFixedSize(400, 500);
 }
 
 ScheduleForm::ScheduleForm(const Schedule& schedule, CategoryManager* categoryManager, QWidget* parent)
-    : QDialog(parent), m_categoryManager(categoryManager)
+    : QDialog(parent), m_categoryManager(categoryManager), m_scheduleId(schedule.id())
 {
     if (m_categoryManager) {
         m_categories = m_categoryManager->getAllCategories();
@@ -34,8 +39,12 @@ ScheduleForm::ScheduleForm(const Schedule& schedule, CategoryManager* categoryMa
     m_locationEdit->setText(schedule.location());
     m_memoEdit->setPlainText(schedule.memo());
 
+    m_categoryCombo->clear();
     for (const Category& cat : m_categories) {
-        m_categoryCombo->addItem(cat.title());
+        QPixmap pixmap(12, 12);
+        pixmap.fill(QColor(cat.color()));
+        QIcon icon(pixmap);
+        m_categoryCombo->addItem(icon, cat.title());
     }
 
     // 기존 카테고리 선택 index 설정
@@ -157,9 +166,8 @@ Schedule ScheduleForm::getSchedule() const
         selectedCategoryId = m_categories[index].id();  // Category에서 id를 받아야 함
     }
 
-    // 임시 ID -1로 설정, 실제 DB 추가 시 고유 ID가 부여됨
     return Schedule(
-        -1,
+        m_scheduleId,
         m_titleEdit->text().trimmed(),
         m_startEdit->dateTime(),
         m_endEdit->dateTime(),
@@ -175,20 +183,13 @@ void ScheduleForm::onAddCategoryClicked()
     CategoryView categoryViewDialog(m_categoryManager, this);
     categoryViewDialog.exec(); // 모달 다이얼로그로 실행
 
-    // 다이얼로그 종료 후: ScheduleForm의 카테고리 목록과 콤보박스 갱신
-
-    // 1. 카테고리 매니저에서 최신 목록을 다시 불러옵니다.
     if (m_categoryManager) {
         m_categories = m_categoryManager->getAllCategories();
     }
 
-    // 2. QComboBox의 기존 항목을 지웁니다.
     m_categoryCombo->clear();
 
-    // 3. QComboBox에 최신 카테고리 목록을 다시 추가합니다.
     for (const Category& cat : m_categories) {
         m_categoryCombo->addItem(cat.title());
     }
-
-    // (선택 사항: 만약 수정 중이었다면, 기존에 선택된 카테고리를 다시 선택하도록 로직을 추가할 수 있습니다.)
 }

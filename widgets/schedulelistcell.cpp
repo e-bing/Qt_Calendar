@@ -1,8 +1,18 @@
 #include "schedulelistcell.h"
 
-ScheduleListCell::ScheduleListCell(const Schedule& schedule, QWidget* parent)
+ScheduleListCell::ScheduleListCell(const Schedule& schedule, CategoryManager* categoryManager, QWidget* parent)
     : QWidget(parent)
 {
+    QString categoryColor = COLOR_PRIMARY; // 기본값
+
+    if (categoryManager) {
+        // categoryId로 색상 조회
+        Category cat = categoryManager->getCategoryById(schedule.categoryId());
+        if (cat.id() != -1) { // 유효한 카테고리가 있다면
+            categoryColor = cat.color();
+        }
+    }
+
     QHBoxLayout* mainLayout = new QHBoxLayout(this);
     mainLayout->setContentsMargins(0,3,0,0);
     mainLayout->setSpacing(8);
@@ -11,7 +21,7 @@ ScheduleListCell::ScheduleListCell(const Schedule& schedule, QWidget* parent)
     QWidget* colorBar = new QWidget(this);
     colorBar->setFixedWidth(6);
     colorBar->setStyleSheet(QString("background: %1; border-radius: 3px;")
-                                .arg(COLOR_PRIMARY)); // 막대 색상, 나중에 카테고리에서 불러오는 코드로 변경
+                                .arg(categoryColor)); // 막대 색상, 나중에 카테고리에서 불러오는 코드로 변경
     mainLayout->addWidget(colorBar);
 
     // 내용 영역

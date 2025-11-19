@@ -18,12 +18,12 @@ void ScheduleDetailView::setupUI()
     // 제목 + 카테고리 색상 박스
     QHBoxLayout* topRow = new QHBoxLayout;
     m_categoryColorBox = new QLabel(this);
-    m_categoryColorBox->setFixedSize(16, 16);
+    m_categoryColorBox->setFixedSize(20, 20);
     m_categoryColorBox->setStyleSheet(QString("background: %1; border-radius: 4px;")
-                                      .arg(COLOR_PRIMARY)); // 라벨 색상 지정 필요
+                                      .arg(COLOR_PRIMARY));
 
     m_titleLabel = new QLabel(this);
-    m_titleLabel->setStyleSheet("font-weight: bold; font-size: 16px; margin-left:9px;");
+    m_titleLabel->setStyleSheet("font-weight: bold; font-size: 16px; margin-left:4px;");
 
     topRow->addWidget(m_categoryColorBox, 0, Qt::AlignVCenter);
     topRow->addWidget(m_titleLabel, 1, Qt::AlignVCenter);
@@ -37,15 +37,21 @@ void ScheduleDetailView::setupUI()
                                    .arg(COLOR_BLACK)); // 시간 폰트 색상
     mainLayout->addWidget(m_timeLabel);
 
+    // 카테고리 이름 라벨
+    m_categoryNameLabel = new QLabel(this);
+    m_categoryNameLabel->setStyleSheet(QString("color:%1; font-size:14px;")
+                                    .arg(COLOR_BLACK)); // 카테고리 이름 폰트 색상
+    mainLayout->addWidget(m_categoryNameLabel);
+
     // 장소 라벨
     m_locationLabel = new QLabel(this);
     m_locationLabel->setStyleSheet(QString("color:%1; font-size:14px;")
-                                       .arg(COLOR_BLACK));
+                                    .arg(COLOR_BLACK));
     mainLayout->addWidget(m_locationLabel);
 
     // 메모 라벨
     m_memoLabel = new QLabel(this);
-    m_memoLabel->setStyleSheet(QString("color:%1; font-size:13px;")
+    m_memoLabel->setStyleSheet(QString("color:%1; font-size:14px;")
                                    .arg(COLOR_BLACK)); // 메모 폰트 색상
     mainLayout->addWidget(m_memoLabel);
 
@@ -60,8 +66,8 @@ void ScheduleDetailView::setupUI()
                                     .arg(COLOR_SECONDARY)); // 폰트 색상
     m_deleteButton->setStyleSheet(QString("padding:6px 15px;border-radius:5px;"
                                    "background-color:%1;border:none;color:%2;")
-                                      .arg(COLOR_PRIMARY) // 버튼 색상
-                                      .arg(COLOR_SECONDARY)); // 폰트 색상
+                                    .arg(COLOR_PRIMARY) // 버튼 색상
+                                    .arg(COLOR_SECONDARY)); // 폰트 색상
 
     connect(m_editButton, &QPushButton::clicked, this, &ScheduleDetailView::onEditClicked);
     connect(m_deleteButton, &QPushButton::clicked, this, &ScheduleDetailView::onDeleteClicked);
@@ -76,6 +82,18 @@ void ScheduleDetailView::setupUI()
 void ScheduleDetailView::updateUI()
 {
     m_titleLabel->setText(m_schedule.title());
+
+    QString catColor = COLOR_PRIMARY;
+    QString catName = "";
+    if (m_categoryManager) {
+        Category cat = m_categoryManager->getCategoryById(m_schedule.categoryId());
+        if (cat.id() != -1) {
+            catColor = cat.color();
+            catName = cat.title();
+        }
+    }
+    m_categoryColorBox->setStyleSheet(QString("background: %1; border-radius: 4px;").arg(catColor));
+    m_categoryNameLabel->setText("카테고리: " + catName);
 
     QString startStr = m_schedule.startTime().toString("yyyy-MM-dd HH:mm");
     QString endStr   = m_schedule.endTime().toString("yyyy-MM-dd HH:mm");
@@ -115,14 +133,11 @@ void ScheduleDetailView::onEditClicked()
     ScheduleForm editForm(m_schedule, m_categoryManager, this);
     if (editForm.exec() == QDialog::Accepted) {
         Schedule updatedSchedule = editForm.getSchedule();
-        qDebug() << "Emit scheduleUpdated, updatedId:" << updatedSchedule.id();
 
         if (m_scheduleManager && m_scheduleManager->updateSchedule(updatedSchedule)) {
             m_schedule = updatedSchedule;
             updateUI();
             QMessageBox::information(this, "성공", "일정이 수정되었습니다.");
-            qDebug() << "Emit scheduleUpdated, updatedId:" << updatedSchedule.id();
-            qDebug() << "Emit scheduleUpdated, scheduleId:" << m_schedule.id();
             emit scheduleUpdated(m_schedule.id(), m_schedule);
         } else {
             QMessageBox::warning(this, "실패", "일정 수정에 실패했습니다.");

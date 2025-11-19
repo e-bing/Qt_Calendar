@@ -7,13 +7,14 @@
 #include <QVBoxLayout>
 
 #include "../models/schedule.h"
+#include "../models/categorymanager.h"
 #include "../resources/styles/colors.h"
 
 class ScheduleListCell : public QWidget
 {
     Q_OBJECT
 public:
-    ScheduleListCell(const Schedule& schedule, QWidget* parent = nullptr);
+    ScheduleListCell(const Schedule& schedule, CategoryManager* categoryManager, QWidget* parent = nullptr);
 
 signals:
 };
