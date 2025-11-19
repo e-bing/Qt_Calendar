@@ -63,6 +63,9 @@ MainWindow::MainWindow(QWidget *parent)
     // 날짜 선택 시 처리
     connect(calendar, &CalendarView::dateSelected,
             this, &MainWindow::handleDateSelected);
+
+    connect(categoryManager, &CategoryManager::categoryUpdated,
+            this, &MainWindow::onCategoryChanged);
 }
 
 void MainWindow::handleDateSelected(const QDate& date)
@@ -82,6 +85,12 @@ void MainWindow::onSearchButtonClicked()
 {
     SearchDialog dlg(scheduleManager, categoryManager, this);
     dlg.exec();
+}
+
+void MainWindow::onCategoryChanged()
+{
+    QList<Category> latestCategories = categoryManager->getAllCategories();
+    calendar->setCategories(latestCategories);
 }
 
 MainWindow::~MainWindow()

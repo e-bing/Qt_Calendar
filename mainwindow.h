@@ -32,5 +32,6 @@ private:
 
     void handleDateSelected(const QDate& date);
     void onSearchButtonClicked();
+    void onCategoryChanged();
 };
 #endif // MAINWINDOW_H

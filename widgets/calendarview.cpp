@@ -50,6 +50,8 @@ void CalendarView::setSchedules(const QList<Schedule>& schedules)
 void CalendarView::setCategories(const QList<Category>& categories)
 {
     m_categories = categories;
+    updateCells();
+    update();
 }
 
 QColor CalendarView::categoryColorById(int categoryId) const

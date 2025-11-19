@@ -1,4 +1,4 @@
-#include "CategoryManager.h"
+#include "categorymanager.h"
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QDebug>
@@ -26,7 +26,15 @@ bool CategoryManager::updateCategory(const Category &category)
     query.addBindValue(category.title());
     query.addBindValue(category.color());
     query.addBindValue(category.id());
-    return query.exec();
+    emit categoryUpdated(category.id());
+    bool result = query.exec();
+
+    if (result) {
+        emit categoryUpdated(category.id());
+    } else {
+        qDebug() << "카테고리 업데이트 실패:" << query.lastError().text();
+    }
+    return result;
 }
 
 CategoryManager::~CategoryManager()
@@ -86,12 +94,14 @@ bool CategoryManager::addCategory(const Category &category)
     query.addBindValue(category.title());
     query.addBindValue(category.color());
 
-    if (!query.exec()) {
+    bool result = query.exec();
+    if (result) {
+        int newId = query.lastInsertId().toInt();
+        emit categoryUpdated(newId);
+    } else {
         qDebug() << "카테고리 추가 실패:" << query.lastError().text();
-        return false;
     }
-
-    return true;
+    return result;
 }
 
 bool CategoryManager::deleteCategory(int id)
@@ -100,12 +110,14 @@ bool CategoryManager::deleteCategory(int id)
     query.prepare("DELETE FROM categories WHERE id = ?");
     query.addBindValue(id);
 
-    if (!query.exec()) {
+    bool result = query.exec();
+    if (result) {
+        emit categoryUpdated(id);
+    } else {
         emit databaseError("Failed to delete category: " + query.lastError().text());
-        return false;
+        qDebug() << "카테고리 삭제 실패:" << query.lastError().text();
     }
-
-    return true;
+    return result;
 }
 
 QList<Category> CategoryManager::getAllCategories()

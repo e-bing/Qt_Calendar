@@ -31,6 +31,7 @@ public:
 
 signals:
     void databaseError(const QString &msg);
+    void categoryUpdated(int categoryId);
 
 private:
     QSqlDatabase m_database;
