@@ -87,8 +87,12 @@ void ScheduleForm::setupUI()
     m_addCategoryButton->setFixedSize(60, 24);
 
     m_categoryCombo = new QComboBox(this);
+    m_categoryCombo->clear();
     for (const Category& cat : m_categories) {
-        m_categoryCombo->addItem(cat.title());
+        QPixmap pixmap(12, 12);
+        pixmap.fill(QColor(cat.color()));
+        QIcon icon(pixmap);
+        m_categoryCombo->addItem(icon, cat.title());
     }
 
     // 장소
