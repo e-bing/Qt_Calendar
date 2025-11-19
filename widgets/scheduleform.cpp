@@ -4,13 +4,14 @@
 #include <QLabel>
 #include <QMessageBox>
 
-ScheduleForm::ScheduleForm(QWidget* parent)
-    : QDialog(parent)
+ScheduleForm::ScheduleForm(const QList<Category>& categories, QWidget* parent)
+    : QDialog(parent), m_categories(categories)
 {
     setupUI();
+
     connectSignals();
     setWindowTitle("일정 추가");
-    setFixedSize(400, 300);
+    setFixedSize(400, 500);
 }
 
 void ScheduleForm::setupUI()
@@ -30,6 +31,12 @@ void ScheduleForm::setupUI()
     QLabel* endLabel = new QLabel("종료 시간:", this);
     m_endEdit = new QDateTimeEdit(QDateTime::currentDateTime(), this);
     m_endEdit->setCalendarPopup(true);
+
+    QLabel* categoryLabel = new QLabel("카테고리:", this);
+    m_categoryCombo = new QComboBox(this);
+    for (const Category& cat : m_categories) {
+        m_categoryCombo->addItem(cat.title());
+    }
 
     // 장소
     QLabel* locationLabel = new QLabel("장소:", this);
@@ -53,6 +60,9 @@ void ScheduleForm::setupUI()
 
     mainLayout->addWidget(endLabel);
     mainLayout->addWidget(m_endEdit);
+
+    mainLayout->addWidget(categoryLabel);
+    mainLayout->addWidget(m_categoryCombo);
 
     mainLayout->addWidget(locationLabel);
     mainLayout->addWidget(m_locationEdit);
@@ -90,6 +100,13 @@ void ScheduleForm::onOkClicked()
 
 Schedule ScheduleForm::getSchedule() const
 {
+    int index = m_categoryCombo->currentIndex();
+    int selectedCategoryId = -1;
+    if (index >= 0 && index < m_categories.size())
+    {
+        selectedCategoryId = m_categories[index].id();  // Category에서 id를 받아야 함
+    }
+
     // 임시 ID -1로 설정, 실제 DB 추가 시 고유 ID가 부여됨
     return Schedule(
         -1,
@@ -97,6 +114,7 @@ Schedule ScheduleForm::getSchedule() const
         m_startEdit->dateTime(),
         m_endEdit->dateTime(),
         m_locationEdit->text().trimmed(),
-        m_memoEdit->toPlainText()
+        m_memoEdit->toPlainText(),
+        selectedCategoryId
         );
 }

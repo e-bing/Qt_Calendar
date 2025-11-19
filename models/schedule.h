@@ -13,7 +13,8 @@ public:
              const QDateTime &m_start,
              const QDateTime &m_end,
              const QString &m_location = "",
-             const QString &m_memo = "");
+             const QString &m_memo = "",
+             int m_categoryId = 0);
 
     // Getter Function
     int id() const;
@@ -22,6 +23,7 @@ public:
     QDateTime endTime() const;
     QString location() const;
     QString memo() const;
+    int categoryId() const;
 
     // Setter Function
     void setTitle(const QString &value);
@@ -29,6 +31,7 @@ public:
     void setEndTime(const QDateTime &value);
     void setLocation(const QString &value);
     void setMemo(const QString &value);
+    void setCategoryId(const int &value);
 
 private:
     int m_id;
@@ -37,6 +40,7 @@ private:
     QDateTime m_end;
     QString m_location;
     QString m_memo;
+    int m_categoryId;
 };
 
 #endif // SCHEDULE_H

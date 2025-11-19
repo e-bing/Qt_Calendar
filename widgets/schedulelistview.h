@@ -7,6 +7,7 @@
 #include <QListWidget>
 #include <QVBoxLayout>
 #include "../models/schedule.h"
+#include "../models/categorymanager.h"
 #include "scheduledetailview.h"
 #include "schedulelistcell.h"
 #include "scheduleform.h"
@@ -18,13 +19,14 @@ class ScheduleListView : public QDialog
 {
     Q_OBJECT
 public:
-    explicit ScheduleListView(const QList<Schedule>& schedules, const QDate& date, ScheduleManager* manager, QWidget *parent = nullptr);
+    explicit ScheduleListView(const QList<Schedule>& schedules, const QDate& date, ScheduleManager* manager, CategoryManager* categoryManager, QWidget *parent = nullptr);
 
 private:
     QLabel* m_dateLabel;
     QListWidget* m_listWidget;
     QList<Schedule> m_schedules;
     ScheduleManager* m_scheduleManager;
+    CategoryManager* m_categoryManager;
     QPushButton* m_addButton;
 
     void setupUI();

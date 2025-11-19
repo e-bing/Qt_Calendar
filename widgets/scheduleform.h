@@ -7,13 +7,15 @@
 #include <QTextEdit>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QComboBox>
+#include "../models/category.h"
 #include "../models/schedule.h"
 
 class ScheduleForm : public QDialog
 {
     Q_OBJECT
 public:
-    explicit ScheduleForm(QWidget *parent = nullptr);
+    explicit ScheduleForm(const QList<Category>& categories, QWidget *parent = nullptr);
     Schedule getSchedule() const;
 
 private:
@@ -22,6 +24,8 @@ private:
     QDateTimeEdit* m_endEdit;
     QLineEdit* m_locationEdit;
     QTextEdit* m_memoEdit;
+    QComboBox* m_categoryCombo;
+    QList<Category> m_categories;
 
     QPushButton* m_okButton;
     QPushButton* m_cancelButton;
