@@ -4,7 +4,7 @@
 #include <QLabel>
 #include <QMessageBox>
 
-ScheduleForm::ScheduleForm(CategoryManager* categoryManager, QWidget* parent)
+ScheduleForm::ScheduleForm(CategoryManager* categoryManager, const QDate& defaultDate, QWidget* parent)
     : QDialog(parent), m_categoryManager(categoryManager)
 {
     if (m_categoryManager) {
@@ -12,6 +12,11 @@ ScheduleForm::ScheduleForm(CategoryManager* categoryManager, QWidget* parent)
     }
 
     setupUI();
+
+    QDateTime defaultStart = QDateTime(defaultDate, QTime::currentTime());
+    QDateTime defaultEnd = defaultStart.addSecs(3600);
+    m_startEdit->setDateTime(defaultStart);
+    m_endEdit->setDateTime(defaultEnd);
 
     connectSignals();
     setWindowTitle("일정 추가");
@@ -36,7 +41,7 @@ ScheduleForm::ScheduleForm(const Schedule& schedule, CategoryManager* categoryMa
     m_categoryCombo->clear();
     for (const Category& cat : m_categories) {
         QPixmap pixmap(12, 12);
-        pixmap.fill(QColor(cat.color()));   // 카테고리 색상으로 픽스맵 채우기
+        pixmap.fill(QColor(cat.color()));
         QIcon icon(pixmap);
         m_categoryCombo->addItem(icon, cat.title());
     }

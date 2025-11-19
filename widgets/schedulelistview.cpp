@@ -1,7 +1,7 @@
 #include "schedulelistview.h"
 
 ScheduleListView::ScheduleListView(const QList<Schedule>& schedules, const QDate& date, ScheduleManager* manager, CategoryManager* categoryManager, QWidget *parent)
-    : QDialog(parent), m_schedules(schedules), m_scheduleManager(manager), m_categoryManager(categoryManager)
+    : QDialog(parent), m_schedules(schedules), m_scheduleManager(manager), m_categoryManager(categoryManager), m_date(date)
 {
     setupUI();
     m_dateLabel->setText(date.toString("yyyy-MM-dd"));
@@ -90,7 +90,7 @@ void ScheduleListView::onScheduleUpdated(int scheduleId, const Schedule& updated
 
 void ScheduleListView::onAddButtonClicked()
 {
-    ScheduleForm* form = new ScheduleForm(m_categoryManager, this);
+    ScheduleForm* form = new ScheduleForm(m_categoryManager, m_date, this);
 
     if (form->exec() == QDialog::Accepted) {
         Schedule newSchedule = form->getSchedule();
