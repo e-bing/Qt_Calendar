@@ -8,10 +8,14 @@
 CategoryManager::CategoryManager(const QString &dbPath, QObject *parent)
     : QObject(parent), m_dbPath(dbPath)
 {
-    if (!QSqlDatabase::contains("category_connection"))
+    if (!QSqlDatabase::contains("shared_connection"))
     {
-        m_database = QSqlDatabase::addDatabase("QSQLITE", "category_connection");
+        m_database = QSqlDatabase::addDatabase("QSQLITE", "shared_connection");
         m_database.setDatabaseName(m_dbPath);
+    }
+    else
+    {
+        m_database = QSqlDatabase::database("shared_connection");
     }
 }
 
@@ -37,8 +41,8 @@ bool CategoryManager::deleteCategory(int id)
 
 CategoryManager::~CategoryManager()
 {
-    QSqlDatabase::database("category_connection").close();
-    QSqlDatabase::removeDatabase("category_connection");
+    QSqlDatabase::database("shared_connection").close();
+    QSqlDatabase::removeDatabase("shared_connection");
 }
 
 bool CategoryManager::openDatabase()
@@ -66,6 +70,17 @@ bool CategoryManager::openDatabase()
         return false;
     }
 
+    QSqlQuery checkQuery(m_database);
+    if (checkQuery.exec("SELECT COUNT(*) FROM categories") && checkQuery.next()) {
+        int count = checkQuery.value(0).toInt();
+        if (count == 0) {
+            // 카테고리가 없으면 생성
+            addCategory(Category(-1, "일반", COLOR_PRIMARY));
+        }
+    } else {
+        qDebug() << "카테고리 개수 조회 실패:" << checkQuery.lastError().text();
+    }
+
     return true;
 }
 
@@ -83,6 +98,20 @@ bool CategoryManager::addCategory(const Category &category)
 
     if (!query.exec()) {
         qDebug() << "카테고리 추가 실패:" << query.lastError().text();
+        return false;
+    }
+
+    return true;
+}
+
+bool CategoryManager::deleteCategory(int id)
+{
+    QSqlQuery query(m_database);
+    query.prepare("DELETE FROM categories WHERE id = ?");
+    query.addBindValue(id);
+
+    if (!query.exec()) {
+        emit databaseError("Failed to delete category: " + query.lastError().text());
         return false;
     }
 

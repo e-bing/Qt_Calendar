@@ -8,6 +8,7 @@
 #include <QList>
 #include <QVariantMap>
 #include "category.h"
+#include "../resources/styles/colors.h"
 
 class CategoryManager : public QObject
 {

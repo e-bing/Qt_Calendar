@@ -3,13 +3,22 @@
 ScheduleManager::ScheduleManager(const QString& dbPath, QObject* parent)
     : QObject(parent), m_dbPath(dbPath)
 {
-    m_database = QSqlDatabase::addDatabase("QSQLITE");
-    m_database.setDatabaseName(m_dbPath);
+    if (!QSqlDatabase::contains("shared_connection"))
+    {
+        m_database = QSqlDatabase::addDatabase("QSQLITE", "shared_connection");
+        m_database.setDatabaseName(m_dbPath);
+    }
+    else
+    {
+        m_database = QSqlDatabase::database("shared_connection");
+    }
 }
 
 ScheduleManager::~ScheduleManager()
 {
-    closeDatabase();
+    if (m_database.isOpen()) {
+        m_database.close();
+    }
 }
 
 bool ScheduleManager::openDatabase()
@@ -17,8 +26,6 @@ bool ScheduleManager::openDatabase()
     QString dbDir = QFileInfo(m_dbPath).absolutePath();
 
     if(!QDir(dbDir).exists()) {
-        // 테스트 코드, 삭제 필요
-        // 헤더에서 qDebug 제거
         qDebug() << "DB 폴더를 생성합니다:" << dbDir;
         QDir().mkpath(dbDir);
     }
@@ -26,6 +33,11 @@ bool ScheduleManager::openDatabase()
     if (!m_database.open()) {
         emit databaseError("Failed to open database: " + m_database.lastError().text());
         return false;
+    }
+
+    QSqlQuery pragmaQuery(m_database);
+    if(!pragmaQuery.exec("PRAGMA foreign_keys = ON")) {
+        qWarning() << "Failed to enable foreign keys:" << pragmaQuery.lastError().text();
     }
 
     QSqlQuery query(m_database);
@@ -36,7 +48,9 @@ bool ScheduleManager::openDatabase()
             start_time TEXT NOT NULL,
             end_time TEXT NOT NULL,
             location TEXT,
-            memo TEXT
+            memo TEXT,
+            category_id INTEGER DEFAULT 0,
+            FOREIGN KEY (category_id) REFERENCES categories(id)
         )
     )";
 
@@ -57,32 +71,39 @@ void ScheduleManager::closeDatabase()
 
 bool ScheduleManager::addSchedule(const Schedule& schedule)
 {
+
     QSqlQuery query(m_database);
-    query.prepare("INSERT INTO schedules (title, start_time, end_time, location, memo) "
-                  "VALUES (?, ?, ?, ?, ?)");
+
+    QString sql =
+        "INSERT INTO schedules (title, start_time, end_time, location, memo, category_id) "
+        "VALUES (?, ?, ?, ?, ?, ?)";
+    query.prepare(sql);
+
     query.addBindValue(schedule.title());
     query.addBindValue(schedule.startTime().toString(Qt::ISODate));
     query.addBindValue(schedule.endTime().toString(Qt::ISODate));
     query.addBindValue(schedule.location());
     query.addBindValue(schedule.memo());
+    query.addBindValue(schedule.categoryId());
 
-    if (!query.exec()) {
+    if(!query.exec()) {
+        qDebug() << "schedule add 실패:" << query.lastError().text();
         emit databaseError("Failed to insert schedule: " + query.lastError().text());
         return false;
     }
-
     return true;
 }
 
 bool ScheduleManager::updateSchedule(const Schedule& schedule)
 {
     QSqlQuery query(m_database);
-    query.prepare("UPDATE schedules SET title = ?, start_time = ?, end_time = ?, location = ?, memo = ? WHERE id = ?");
+    query.prepare("UPDATE schedules SET title = ?, start_time = ?, end_time = ?, location = ?, memo = ?, category_id = ? WHERE id = ?");
     query.addBindValue(schedule.title());
     query.addBindValue(schedule.startTime().toString(Qt::ISODate));
     query.addBindValue(schedule.endTime().toString(Qt::ISODate));
     query.addBindValue(schedule.location());
     query.addBindValue(schedule.memo());
+    query.addBindValue(schedule.categoryId());
     query.addBindValue(schedule.id());
 
     if (!query.exec()) {
@@ -111,7 +132,7 @@ QList<Schedule> ScheduleManager::getAllSchedules()
 {
     QList<Schedule> schedules;
     QSqlQuery query(m_database);
-    if(!query.exec("SELECT id, title, start_time, end_time, location, memo FROM schedules ORDER BY start_time")) {
+    if(!query.exec("SELECT id, title, start_time, end_time, location, memo, category_id FROM schedules ORDER BY start_time")) {
         emit databaseError("Failed to fetch schedules: " + query.lastError().text());
         return schedules;
     }
@@ -124,6 +145,7 @@ QList<Schedule> ScheduleManager::getAllSchedules()
         record["end_time"] = query.value("end_time");
         record["location"] = query.value("location");
         record["memo"] = query.value("memo");
+        record["category_id"] = query.value("category_id");
 
         schedules.append(scheduleFromQuery(record));
     }
@@ -134,7 +156,7 @@ QList<Schedule> ScheduleManager::searchSchedules(const QString& keyword)
 {
     QList<Schedule> schedules;
     QSqlQuery query(m_database);
-    query.prepare("SELECT id, title, start_time, end_time, location, memo FROM schedules WHERE title LIKE ? ORDER BY start_time");
+    query.prepare("SELECT id, title, start_time, end_time, location, memo, category_id FROM schedules WHERE title LIKE ? ORDER BY start_time");
     query.addBindValue("%" + keyword + "%");
 
     if (!query.exec()) {
@@ -150,6 +172,7 @@ QList<Schedule> ScheduleManager::searchSchedules(const QString& keyword)
         record["end_time"] = query.value("end_time");
         record["location"] = query.value("location");
         record["memo"] = query.value("memo");
+        record["category_id"] = query.value("category_id");
 
         schedules.append(scheduleFromQuery(record));
     }
@@ -164,6 +187,7 @@ Schedule ScheduleManager::scheduleFromQuery(const QVariantMap& record)
     QDateTime end = QDateTime::fromString(record.value("end_time").toString(), Qt::ISODate);
     QString location = record.value("location").toString();
     QString memo = record.value("memo").toString();
+    int category_id = record.value("category_id").toInt();
 
-    return Schedule(id, title, start, end, location, memo);
+    return Schedule(id, title, start, end, location, memo, category_id);
 }

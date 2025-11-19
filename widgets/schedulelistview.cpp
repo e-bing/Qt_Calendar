@@ -1,7 +1,7 @@
 #include "schedulelistview.h"
 
-ScheduleListView::ScheduleListView(const QList<Schedule>& schedules, const QDate& date, ScheduleManager* manager, QWidget *parent)
-    : QDialog(parent), m_schedules(schedules), m_scheduleManager(manager)
+ScheduleListView::ScheduleListView(const QList<Schedule>& schedules, const QDate& date, ScheduleManager* manager, CategoryManager* categoryManager, QWidget *parent)
+    : QDialog(parent), m_schedules(schedules), m_scheduleManager(manager), m_categoryManager(categoryManager)
 {
     setupUI();
     m_dateLabel->setText(date.toString("yyyy-MM-dd"));
@@ -10,9 +10,11 @@ ScheduleListView::ScheduleListView(const QList<Schedule>& schedules, const QDate
     connect(m_listWidget, &QListWidget::itemClicked, this, [this](QListWidgetItem* item){
         int idx = m_listWidget->row(item);
         if (idx >= 0 && idx < m_schedules.size()) {
-            ScheduleDetailView* detail = new ScheduleDetailView(m_schedules[idx], m_scheduleManager, this);
+            ScheduleDetailView* detail = new ScheduleDetailView(m_schedules[idx], m_scheduleManager, m_categoryManager, this);
             connect(detail, &ScheduleDetailView::scheduleDeleted, this, &ScheduleListView::scheduleDeleted);
             connect(detail, &ScheduleDetailView::scheduleDeleted, this, &ScheduleListView::onScheduleDeleted);
+            connect(detail, &ScheduleDetailView::scheduleUpdated, this, &ScheduleListView::onScheduleUpdated);
+
             detail->exec();
         }
     });
@@ -74,21 +76,29 @@ void ScheduleListView::onScheduleDeleted(int scheduleId)
     populateSchedules();
 }
 
+void ScheduleListView::onScheduleUpdated(int scheduleId, const Schedule& updatedSchedule)
+{
+    for (int i = 0; i < m_schedules.size(); ++i) {
+        if (m_schedules[i].id() == scheduleId) {
+            m_schedules[i] = updatedSchedule;
+            break;
+        }
+    }
+    populateSchedules();
+}
+
 void ScheduleListView::onAddButtonClicked()
 {
-    ScheduleForm* form = new ScheduleForm(this);
-    // ScheduleForm은 새 일정 정보를 입력받는 다이얼로그라고 가정
+    ScheduleForm* form = new ScheduleForm(m_categoryManager, this);
 
     if (form->exec() == QDialog::Accepted) {
         Schedule newSchedule = form->getSchedule();
-
         // DB에 새 일정 추가
         if (m_scheduleManager->addSchedule(newSchedule)) {
             // 성공 시 m_schedules에 추가 후 UI 갱신
             m_schedules.append(newSchedule);
             populateSchedules();
-
-            emit scheduleDeleted(newSchedule.id()); // 필요시 상위 알림용 신호도 emit
+            emit scheduleDeleted(newSchedule.id()); // 상위 알림용 신호 emit
         } else {
             QMessageBox::warning(this, "추가 실패", "일정 추가에 실패했습니다.");
         }

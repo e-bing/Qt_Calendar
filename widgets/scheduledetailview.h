@@ -12,17 +12,20 @@
 
 #include "../models/schedule.h"
 #include "../models/schedulemanager.h"
+#include "../models/categorymanager.h"
+#include "./scheduleform.h"
 #include "../resources/styles/colors.h"
 
 class ScheduleDetailView : public QDialog
 {
     Q_OBJECT
 public:
-    explicit ScheduleDetailView(const Schedule& schedule, ScheduleManager* manager, QWidget* parent);
+    explicit ScheduleDetailView(const Schedule& schedule, ScheduleManager* manager, CategoryManager* categoryManager, QWidget* parent);
 
 private:
-    const Schedule m_schedule;
+    Schedule m_schedule;
     ScheduleManager* m_scheduleManager;
+    CategoryManager* m_categoryManager;
 
     QLabel* m_titleLabel;
     QLabel* m_timeLabel;
@@ -35,9 +38,12 @@ private:
     void setupUI();
     void updateUI();
     void onDeleteClicked();
+    void onEditClicked();
 
 signals:
     void scheduleDeleted(int scheduleId);
+    void scheduleUpdated(int scheduleId, const Schedule& updatedSchedule);
+
 };
 
 #endif // SCHEDULEDETAILVIEW_H
