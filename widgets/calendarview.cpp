@@ -47,9 +47,24 @@ void CalendarView::setSchedules(const QList<Schedule>& schedules)
     update();
 }
 
+void CalendarView::setCategories(const QList<Category>& categories)
+{
+    m_categories = categories;
+}
+
+QColor CalendarView::categoryColorById(int categoryId) const
+{
+    for (const auto& category : m_categories) {
+        if (category.id() == categoryId) {
+            // qDebug() << category.color();
+            return QColor(category.color());
+        }
+    }
+    return QColor(COLOR_PRIMARY);
+}
+
 void CalendarView::paintCell(QPainter *painter, const QRect &rect, QDate date) const
 {
-
     // QCalendarWidget::paintCell(painter, rect, date);
     bool isCurrentMonth = (date.month() == this->monthShown()) && (date.year() == this->yearShown());
 
@@ -81,8 +96,8 @@ void CalendarView::paintCell(QPainter *painter, const QRect &rect, QDate date) c
             );
 
         painter->save();
-        // 박스 색상 카테고리별로 설정 필요
-        QColor boxColor = QColor(COLOR_PRIMARY);
+
+        QColor boxColor = categoryColorById(schedules[i].categoryId());
         painter->setBrush(boxColor);
         painter->setPen(Qt::NoPen);
         painter->drawRoundedRect(boxRect, 4, 4);
