@@ -6,7 +6,7 @@
 
 #include "./models/category.h"
 #include "./models/categorymanager.h"
-#include "./widgets/categoryform.h"
+#include "./categoryform.h"
 
 
 
