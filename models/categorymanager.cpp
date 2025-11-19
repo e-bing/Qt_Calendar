@@ -31,13 +31,13 @@ bool CategoryManager::updateCategory(const Category &category)
     return query.exec();
 }
 
-bool CategoryManager::deleteCategory(int id)
-{
-    QSqlQuery query(m_database);
-    query.prepare("DELETE FROM categories WHERE id=?");
-    query.addBindValue(id);
-    return query.exec();
-}
+// bool CategoryManager::deleteCategory(int id)
+// {
+//     QSqlQuery query(m_database);
+//     query.prepare("DELETE FROM categories WHERE id=?");
+//     query.addBindValue(id);
+//     return query.exec();
+// }
 
 CategoryManager::~CategoryManager()
 {
