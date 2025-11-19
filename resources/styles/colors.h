@@ -5,6 +5,7 @@
 
 // 색상 정의
 const QString COLOR_PRIMARY = "#ffcaa8";
+const QString COLOR_PRIMARY_HOVER = "#ffaf75";
 const QString COLOR_SECONDARY = "#545454";
 const QString COLOR_BACKGROUND = "#ffffff";
 const QString COLOR_BLACK = "#000000";

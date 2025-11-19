@@ -7,6 +7,7 @@
 #include "./models/schedulemanager.h"
 #include "./models/categorymanager.h"
 #include "./widgets/schedulelistview.h"
+#include "./widgets/searchdialog.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -27,7 +28,9 @@ private:
     ScheduleManager* scheduleManager;
     CalendarView* calendar;
     CategoryManager* categoryManager;
+    QPushButton* searchButton;
 
     void handleDateSelected(const QDate& date);
+    void onSearchButtonClicked();
 };
 #endif // MAINWINDOW_H
