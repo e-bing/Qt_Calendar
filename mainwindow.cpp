@@ -1,11 +1,7 @@
-#include "mainwindow.h"
+#include "./mainwindow.h"
 #include "./ui_mainwindow.h"
 
 #include <QVBoxLayout>
-
-// test code
-#include <QString>
-#include <QDateTime>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -50,15 +46,6 @@ MainWindow::MainWindow(QWidget *parent)
         // 에러 처리
         return;
     }
-
-    // test code
-    // Category* b = new Category(2, QString("개인"), QString("#a3d6b1"));
-    // Category* c = new Category(3, QString("회사"), QString("#a3bad6"));
-    // categoryManager->addCategory(*b);
-    // categoryManager->addCategory(*c);
-
-    // categoryManager->deleteCategory(1);
-    // categoryManager->deleteCategory(2);
 
     scheduleManager = new ScheduleManager(dbPath, this);
 

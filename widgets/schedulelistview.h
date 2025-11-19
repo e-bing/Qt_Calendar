@@ -40,7 +40,6 @@ private slots:
 
 signals:
     void scheduleUpdated(int scheduleId);
-    // void scheduleUpdated(int scheduleId, const Schedule& updatedSchedule);
 };
 
 #endif // SCHEDULELISTVIEW_H

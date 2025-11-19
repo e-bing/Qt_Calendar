@@ -3,7 +3,6 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QMessageBox>
-#include <QDebug> // 디버깅용으로 필요시 사용
 
 ScheduleForm::ScheduleForm(CategoryManager* categoryManager, const QDate& defaultDate, QWidget* parent)
     : QDialog(parent), m_categoryManager(categoryManager)
@@ -167,7 +166,7 @@ Schedule ScheduleForm::getSchedule() const
     int selectedCategoryId = -1;
     if (index >= 0 && index < m_categories.size())
     {
-        selectedCategoryId = m_categories[index].id();  // Category에서 id를 받아야 함
+        selectedCategoryId = m_categories[index].id();
     }
 
     return Schedule(
@@ -183,9 +182,8 @@ Schedule ScheduleForm::getSchedule() const
 
 void ScheduleForm::onAddCategoryClicked()
 {
-    // CategoryView를 QDialog로 실행
     CategoryView categoryViewDialog(m_categoryManager, this);
-    categoryViewDialog.exec(); // 모달 다이얼로그로 실행
+    categoryViewDialog.exec();
 
     if (m_categoryManager) {
         m_categories = m_categoryManager->getAllCategories();
@@ -194,6 +192,9 @@ void ScheduleForm::onAddCategoryClicked()
     m_categoryCombo->clear();
 
     for (const Category& cat : m_categories) {
-        m_categoryCombo->addItem(cat.title());
+        QPixmap pixmap(12, 12);
+        pixmap.fill(QColor(cat.color()));
+        QIcon icon(pixmap);
+        m_categoryCombo->addItem(icon, cat.title());
     }
 }

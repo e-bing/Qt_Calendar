@@ -94,12 +94,11 @@ void ScheduleListView::onAddButtonClicked()
 
     if (form->exec() == QDialog::Accepted) {
         Schedule newSchedule = form->getSchedule();
-        // DB에 새 일정 추가
+
         if (m_scheduleManager->addSchedule(newSchedule)) {
-            // 성공 시 m_schedules에 추가 후 UI 갱신
             m_schedules.append(newSchedule);
             populateSchedules();
-            emit scheduleUpdated(newSchedule.id()); // 상위 알림용 신호 emit
+            emit scheduleUpdated(newSchedule.id());
         } else {
             QMessageBox::warning(this, "추가 실패", "일정 추가에 실패했습니다.");
         }

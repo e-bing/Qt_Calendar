@@ -19,8 +19,6 @@ CategoryManager::CategoryManager(const QString &dbPath, QObject *parent)
     }
 }
 
-// CategoryView를 위한 함수 추가 (updateCategory, deleteCategory)
-
 bool CategoryManager::updateCategory(const Category &category)
 {
     QSqlQuery query(m_database);
@@ -30,14 +28,6 @@ bool CategoryManager::updateCategory(const Category &category)
     query.addBindValue(category.id());
     return query.exec();
 }
-
-// bool CategoryManager::deleteCategory(int id)
-// {
-//     QSqlQuery query(m_database);
-//     query.prepare("DELETE FROM categories WHERE id=?");
-//     query.addBindValue(id);
-//     return query.exec();
-// }
 
 CategoryManager::~CategoryManager()
 {
