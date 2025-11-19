@@ -6,9 +6,8 @@ ScheduleListCell::ScheduleListCell(const Schedule& schedule, CategoryManager* ca
     QString categoryColor = COLOR_PRIMARY; // 기본값
 
     if (categoryManager) {
-        // categoryId로 색상 조회
         Category cat = categoryManager->getCategoryById(schedule.categoryId());
-        if (cat.id() != -1) { // 유효한 카테고리가 있다면
+        if (cat.id() != -1) {
             categoryColor = cat.color();
         }
     }
@@ -21,7 +20,7 @@ ScheduleListCell::ScheduleListCell(const Schedule& schedule, CategoryManager* ca
     QWidget* colorBar = new QWidget(this);
     colorBar->setFixedWidth(6);
     colorBar->setStyleSheet(QString("background: %1; border-radius: 3px;")
-                                .arg(categoryColor)); // 막대 색상, 나중에 카테고리에서 불러오는 코드로 변경
+                                .arg(categoryColor));
     mainLayout->addWidget(colorBar);
 
     // 내용 영역

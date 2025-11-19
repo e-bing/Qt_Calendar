@@ -5,7 +5,6 @@ SearchDialog::SearchDialog(ScheduleManager* scheduleManager, CategoryManager* ca
 {
     setupUI();
 
-    // connect(m_resultList, &QListWidget::itemClicked, this, &SearchDialog::onResultItemClicked);
     connect(m_searchButton, &QPushButton::clicked, this, &SearchDialog::onSearchClicked);
 }
 
@@ -99,7 +98,6 @@ void SearchDialog::onResultItemClicked(QListWidgetItem* item)
     Schedule schedule = m_currentResults[idx];
     ScheduleDetailView* detail = new ScheduleDetailView(schedule, m_scheduleManager, m_categoryManager, this);
 
-    // 시그널 연결 (필요시)
     connect(detail, &ScheduleDetailView::scheduleDeleted, this, &SearchDialog::onScheduleUpdated);
     connect(detail, &ScheduleDetailView::scheduleUpdated, this, &SearchDialog::onScheduleUpdated);
 
