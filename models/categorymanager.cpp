@@ -137,3 +137,14 @@ QList<Category> CategoryManager::getAllCategories()
 
     return list;
 }
+
+Category CategoryManager::getCategoryById(int id)
+{
+    QList<Category> categories = getAllCategories();
+    for (const Category& cat : categories) {
+        if (cat.id() == id) {
+            return cat;
+        }
+    }
+    return Category(); // id가 -1인 빈 카테고리 반환
+}

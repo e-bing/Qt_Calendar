@@ -12,6 +12,7 @@
 #include <QDate>
 #include <QRect>
 #include "../models/schedule.h"
+#include "../models/category.h"
 #include "../resources/styles/colors.h"
 
 class CalendarView : public QCalendarWidget
@@ -22,6 +23,7 @@ public:
     explicit CalendarView(QWidget *parent = nullptr);
     QList<Schedule> showSchedulesForDate(const QDate& date) const;
     void setSchedules(const QList<Schedule>& schedules);
+    void setCategories(const QList<Category>& categories);
 
 signals:
     void dateSelected(const QDate& date);
@@ -35,8 +37,9 @@ protected:
 
 private:
     QList<Schedule> m_schedules;
-
+    QList<Category> m_categories;
     QList<Schedule> findSchedulesForDate(const QDate& date) const;
+    QColor categoryColorById(int categoryId) const;
 };
 
 #endif // CALENDARVIEW_H

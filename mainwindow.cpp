@@ -32,8 +32,8 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     // test code
-    // Category* b = new Category(1, QString("개인"), QString("#a3d6b1"));
-    // Category* c = new Category(2, QString("회사"), QString("#a3bad6"));
+    // Category* b = new Category(2, QString("개인"), QString("#a3d6b1"));
+    // Category* c = new Category(3, QString("회사"), QString("#a3bad6"));
     // categoryManager->addCategory(*b);
     // categoryManager->addCategory(*c);
 
@@ -48,21 +48,14 @@ MainWindow::MainWindow(QWidget *parent)
         return;
     }
 
-    // Schedule* a = new Schedule(1, QString("일정이름"), QDateTime::currentDateTime(), QDateTime::currentDateTime(),
-    //                            QString("서울"), QString("맛있는 거 먹기"), 1);
-    // scheduleManager->addSchedule(*a);
-
     // 스케줄 매니저에서 목록 할당
     QList<Schedule> schedules = scheduleManager->getAllSchedules();
+    calendar->setCategories(categoryManager->getAllCategories());
     calendar->setSchedules(schedules);
 
     // 날짜 선택 시 처리
     connect(calendar, &CalendarView::dateSelected,
             this, &MainWindow::handleDateSelected);
-
-    // 일정 선택 시 처리
-    // connect(calendar, &CalendarView::scheduleSelected,
-    //         this, &MainWindow::handleScheduleSelected);
 }
 
 void MainWindow::handleDateSelected(const QDate& date)

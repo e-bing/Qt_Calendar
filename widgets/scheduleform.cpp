@@ -33,6 +33,7 @@ ScheduleForm::ScheduleForm(const Schedule& schedule, CategoryManager* categoryMa
     m_locationEdit->setText(schedule.location());
     m_memoEdit->setPlainText(schedule.memo());
 
+    m_categoryCombo->clear();
     for (const Category& cat : m_categories) {
         m_categoryCombo->addItem(cat.title());
     }
@@ -169,7 +170,7 @@ Schedule ScheduleForm::getSchedule() const
 
 void ScheduleForm::onAddCategoryClicked()
 {
-    CategoryView dlg(m_categoryManager, this); // 필요 시 parent 지정
-    dlg.exec();                 // 다이얼로그 실행
+    // CategoryView dlg(m_categoryManager, this); // 필요 시 parent 지정
+    // dlg.exec();                 // 다이얼로그 실행
     // 추가/수정된 카테고리 내용 반영하려면 m_categories 갱신, 콤보박스 다시 로딩 필요
 }
