@@ -54,7 +54,7 @@ void ScheduleListView::populateSchedules()
 
     for (const Schedule& schedule : m_schedules) {
         QListWidgetItem* item = new QListWidgetItem(m_listWidget);
-        ScheduleListCell* cell = new ScheduleListCell(schedule, m_listWidget);
+        ScheduleListCell* cell = new ScheduleListCell(schedule, m_categoryManager, m_listWidget);
         item->setSizeHint(QSize(280, 56)); // 필요시 조정
         m_listWidget->addItem(item);
         m_listWidget->setItemWidget(item, cell);

@@ -18,9 +18,9 @@ void ScheduleDetailView::setupUI()
     // 제목 + 카테고리 색상 박스
     QHBoxLayout* topRow = new QHBoxLayout;
     m_categoryColorBox = new QLabel(this);
-    m_categoryColorBox->setFixedSize(16, 16);
+    m_categoryColorBox->setFixedSize(20, 20);
     m_categoryColorBox->setStyleSheet(QString("background: %1; border-radius: 4px;")
-                                      .arg(COLOR_PRIMARY)); // 라벨 색상 지정 필요
+                                      .arg(COLOR_PRIMARY));
 
     m_titleLabel = new QLabel(this);
     m_titleLabel->setStyleSheet("font-weight: bold; font-size: 16px; margin-left:9px;");
@@ -76,6 +76,15 @@ void ScheduleDetailView::setupUI()
 void ScheduleDetailView::updateUI()
 {
     m_titleLabel->setText(m_schedule.title());
+
+    QString catColor = COLOR_PRIMARY;
+    if (m_categoryManager) {
+        Category cat = m_categoryManager->getCategoryById(m_schedule.categoryId());
+        if (cat.id() != -1) {
+            catColor = cat.color();
+        }
+    }
+    m_categoryColorBox->setStyleSheet(QString("background: %1; border-radius: 4px;").arg(catColor));
 
     QString startStr = m_schedule.startTime().toString("yyyy-MM-dd HH:mm");
     QString endStr   = m_schedule.endTime().toString("yyyy-MM-dd HH:mm");
