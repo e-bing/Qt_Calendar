@@ -42,7 +42,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         widgets/scheduleform.h widgets/scheduleform.cpp
         widgets/schedulelistview.h widgets/schedulelistview.cpp
         widgets/scheduledetailview.h widgets/scheduledetailview.cpp
-        widgets/categoryform.h widgets/categoryform.cpp
+
         models/schedule.h models/schedule.cpp
         models/category.h models/category.cpp
         models/schedulemanager.h models/schedulemanager.cpp
@@ -51,6 +51,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
         resources/resources.qrc
         categoryview.h categoryview.cpp categoryview.ui
+        categoryform.h categoryform.cpp categoryform.ui
 
     )
 # Define target properties for Android with Qt 6 as:
