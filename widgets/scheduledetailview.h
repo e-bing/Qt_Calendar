@@ -32,6 +32,7 @@ private:
     QLabel* m_locationLabel;
     QLabel* m_memoLabel;
     QLabel* m_categoryColorBox;
+    QLabel* m_categoryNameLabel = nullptr;
     QPushButton* m_editButton;
     QPushButton* m_deleteButton;
 
