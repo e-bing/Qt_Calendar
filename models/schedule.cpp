@@ -18,6 +18,30 @@ Schedule::Schedule(int id,
 {
 }
 
+Schedule::Schedule(const Schedule& other)
+    : m_id(other.m_id),
+    m_title(other.m_title),
+    m_start(other.m_start),
+    m_end(other.m_end),
+    m_location(other.m_location),
+    m_memo(other.m_memo),
+    m_categoryId(other.m_categoryId)
+{}
+
+Schedule& Schedule::operator=(const Schedule& other)
+{
+    if (this != &other) {
+        m_id = other.m_id;
+        m_title = other.m_title;
+        m_start = other.m_start;
+        m_end = other.m_end;
+        m_location = other.m_location;
+        m_memo = other.m_memo;
+        m_categoryId = other.m_categoryId;
+    }
+    return *this;
+}
+
 // 사용자로부터 데이터 받기
 int Schedule::id() const { return m_id; }
 QString Schedule::title() const { return m_title; }

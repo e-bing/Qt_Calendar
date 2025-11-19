@@ -15,6 +15,8 @@ public:
              const QString &m_location = "",
              const QString &m_memo = "",
              int m_categoryId = 0);
+    Schedule(const Schedule& other);
+    Schedule& operator=(const Schedule& other);
 
     // Getter Function
     int id() const;
