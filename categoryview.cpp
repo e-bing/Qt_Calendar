@@ -1,5 +1,6 @@
 #include "./categoryview.h"
 #include "./ui_categoryview.h"
+#include "./ui_categoryform.h"
 
 #include "./models/category.h"
 #include "./models/categorymanager.h"
@@ -26,6 +27,28 @@ CategoryView::CategoryView(QWidget *parent)
     loadCategories();
 }
 
+void CategoryView::on_btnAdd_clicked()
+{
+    CategoryForm form(this);
+    if (form.exec() == QDialog::Accepted) {
+        m_manager->addCategory(form.category());
+        loadCategories();
+    }
+}
+
+void CategoryView::on_btnEdit_clicked()
+{
+    int row = ui->tableCategories->currentRow();
+    if (row < 0) return;
+
+    CategoryForm form(this);
+    form.setCategory(m_list[row]);
+
+    if (form.exec() == QDialog::Accepted) {
+        m_manager->updateCategory(form.category());
+        loadCategories();
+    }
+}
 CategoryView::~CategoryView()
 {
     delete ui;
@@ -42,30 +65,6 @@ void CategoryView::loadCategories()
     }
 }
 
-void CategoryView::on_btnAdd_clicked()
-{
-    CategoryForm form(this);
-    if (form.exec() == QDialog::Accepted) {
-        m_manager->addCategory(form.category());
-        loadCategories();
-    }
-}
-
-void CategoryView::on_btnEdit_clicked()
-{
-    int row = ui->tableCategories->currentRow();
-    if (row < 0) return;
-
-    CategoryForm form(this);
-    form.setCategory(m_list[row]); // 기존 데이터 삽입
-
-    if (form.exec() == QDialog::Accepted) {
-        Category updated = form.category();
-        updated.setId(m_list[row].id());
-        m_manager->updateCategory(updated);
-        loadCategories();
-    }
-}
 
 void CategoryView::on_btnDelete_clicked()
 {
