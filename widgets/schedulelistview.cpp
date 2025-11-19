@@ -13,6 +13,8 @@ ScheduleListView::ScheduleListView(const QList<Schedule>& schedules, const QDate
             ScheduleDetailView* detail = new ScheduleDetailView(m_schedules[idx], m_scheduleManager, m_categoryManager, this);
             connect(detail, &ScheduleDetailView::scheduleDeleted, this, &ScheduleListView::scheduleDeleted);
             connect(detail, &ScheduleDetailView::scheduleDeleted, this, &ScheduleListView::onScheduleDeleted);
+            connect(detail, &ScheduleDetailView::scheduleUpdated, this, &ScheduleListView::onScheduleUpdated);
+
             detail->exec();
         }
     });
@@ -68,6 +70,17 @@ void ScheduleListView::onScheduleDeleted(int scheduleId)
     for (int i = 0; i < m_schedules.size(); ++i) {
         if (m_schedules[i].id() == scheduleId) {
             m_schedules.removeAt(i);
+            break;
+        }
+    }
+    populateSchedules();
+}
+
+void ScheduleListView::onScheduleUpdated(int scheduleId, const Schedule& updatedSchedule)
+{
+    for (int i = 0; i < m_schedules.size(); ++i) {
+        if (m_schedules[i].id() == scheduleId) {
+            m_schedules[i] = updatedSchedule;
             break;
         }
     }

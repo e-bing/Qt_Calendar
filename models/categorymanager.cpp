@@ -13,6 +13,10 @@ CategoryManager::CategoryManager(const QString &dbPath, QObject *parent)
         m_database = QSqlDatabase::addDatabase("QSQLITE", "shared_connection");
         m_database.setDatabaseName(m_dbPath);
     }
+    else
+    {
+        m_database = QSqlDatabase::database("shared_connection");
+    }
 }
 
 CategoryManager::~CategoryManager()

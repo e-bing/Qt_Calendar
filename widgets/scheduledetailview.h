@@ -42,7 +42,7 @@ private:
 
 signals:
     void scheduleDeleted(int scheduleId);
-    void scheduleUpdated(int scheduleId);
+    void scheduleUpdated(int scheduleId, const Schedule& updatedSchedule);
 
 };
 

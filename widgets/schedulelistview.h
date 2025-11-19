@@ -32,12 +32,14 @@ private:
     void setupUI();
     void populateSchedules();
     void onScheduleDeleted(int scheduleId);
+    void onScheduleUpdated(int scheduleId, const Schedule& updatedSchedule);
 
 private slots:
     void onAddButtonClicked();
 
 signals:
     void scheduleDeleted(int scheduleId);
+    void scheduleUpdated(int scheduleId, const Schedule& updatedSchedule);
 };
 
 #endif // SCHEDULELISTVIEW_H
